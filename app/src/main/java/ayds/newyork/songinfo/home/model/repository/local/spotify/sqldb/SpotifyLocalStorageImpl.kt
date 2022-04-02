@@ -33,7 +33,7 @@ internal class SpotifyLocalStorageImpl(
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS " + SONGS_TABLE)
+        db.execSQL(deleteSongsTableQuery)
         onCreate(db)
     }
 

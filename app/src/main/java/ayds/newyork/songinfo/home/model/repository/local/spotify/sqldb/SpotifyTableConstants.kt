@@ -22,3 +22,6 @@ const val createSongsTableQuery: String =
             "$RELEASE_DATE_PRECISION_COLUMN string, " +
             "$SPOTIFY_URL_COLUMN string, " +
             "$IMAGE_URL_COLUMN string)"
+
+const val deleteSongsTableQuery: String =
+    "delete table if exists $SONGS_TABLE"
