@@ -18,7 +18,16 @@ internal class SongDescriptionHelperImpl : SongDescriptionHelper {
                 }\n" +
                         "Artist: ${song.artistName}\n" +
                         "Album: ${song.albumName}\n" +
-                        "Year: ${song.year}"
+                        "Release date: ${
+                            when(song.releaseDatePrecision){
+                                "year" -> song.releaseDate
+                                "month" -> song.releaseDate
+                                "day" -> song.releaseDate
+                                else -> "Precision inválida"
+                            }
+                        
+                        }"
+
             else -> "Song not found"
         }
     }
