@@ -9,6 +9,7 @@ interface SongDescriptionHelper {
 }
 
 internal class SongDescriptionHelperImpl : SongDescriptionHelper {
+    var PrecisionDate : SongDatePrecisionHelper = SongDatePrecisionHelperImpl()
     override fun getSongDescriptionText(song: Song): String {
         return when (song) {
             is SpotifySong ->
@@ -18,15 +19,7 @@ internal class SongDescriptionHelperImpl : SongDescriptionHelper {
                 }\n" +
                         "Artist: ${song.artistName}\n" +
                         "Album: ${song.albumName}\n" +
-                        "Release date: ${
-                            when(song.releaseDatePrecision){
-                                "year" -> song.releaseDate
-                                "month" -> song.releaseDate
-                                "day" -> song.releaseDate
-                                else -> "Precision inválida"
-                            }
-                        
-                        }"
+                        "Release date: ${PrecisionDate.getPrecisionDate(song.releaseDatePrecision,song.releaseDate)}"
 
             else -> "Song not found"
         }
