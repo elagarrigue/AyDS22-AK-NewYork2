@@ -15,5 +15,14 @@ class SongDatePrecisionHelperImpl : SongDatePrecisionHelper {
             "day" -> dateWithDayPrecision(date)
             else -> "Invalid Precision"
         }
-
+    private fun dateWithDayPrecision(date : String) : String{
+        var splitDate = date.split('-')
+        return splitDate[2]+"/"+splitDate[1]+"/"+splitDate[0]
     }
+
+    private fun dateWithMonthPrecision(date : String) : String {
+        var splitDate = date.split('-')
+        return months[splitDate[1].toInt()] +", "+splitDate[0]
+    }
+    
+}
