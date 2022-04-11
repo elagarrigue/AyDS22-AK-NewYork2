@@ -24,5 +24,9 @@ class SongDatePrecisionHelperImpl : SongDatePrecisionHelper {
         var splitDate = date.split('-')
         return months[splitDate[1].toInt()] +", "+splitDate[0]
     }
+
+    private fun dateWithYearPrecision(date : String) : String = if(isLeapYear(date.toInt())) "$date (leap year)" else "$date (not a leap year)"
+
+    private fun isLeapYear(year : Int) = (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)
     
 }
