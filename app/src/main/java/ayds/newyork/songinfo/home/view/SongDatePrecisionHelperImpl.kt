@@ -1,32 +1,50 @@
 package ayds.newyork.songinfo.home.view
 
+import ayds.newyork.songinfo.home.model.entities.Song
+import ayds.newyork.songinfo.home.model.entities.DatePrecision
+
 interface SongDatePrecisionHelper {
-    fun getPrecisionDate(Precision : String, Date : String) : String
+    fun getPrecisionDate(song : Song) : String
 }
 
 class SongDatePrecisionHelperImpl : SongDatePrecisionHelper {
 
-    val months = arrayOf("None", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+    private val months = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 
-    override fun getPrecisionDate(precision: String, date: String): String =
-        when (precision) {
-            "year" -> dateWithYearPrecision(date)
-            "month" -> dateWithMonthPrecision(date)
-            "day" -> dateWithDayPrecision(date)
-            else -> "Invalid Precision"
+    override fun getPrecisionDate(song : Song): String {
+        val precision = song.releaseDatePrecision
+        return when (precision) {
+            DatePrecision.Year -> dateWithYearPrecision(song.releaseDate)
+            DatePrecision.Month -> dateWithMonthPrecision(song.releaseDate)
+            DatePrecision.Day -> dateWithDayPrecision(song.releaseDate)
+            DatePrecision.Empty -> ""
         }
+    }
     private fun dateWithDayPrecision(date : String) : String{
-        var splitDate = date.split('-')
-        return splitDate[2]+"/"+splitDate[1]+"/"+splitDate[0]
+        val splitDate = date.split('-')
+        val day = splitDate[2]
+        val month = splitDate[1]
+        val year = splitDate[0]
+        return "$day / $month / $year"
     }
 
     private fun dateWithMonthPrecision(date : String) : String {
-        var splitDate = date.split('-')
-        return months[splitDate[1].toInt()] +", "+splitDate[0]
+        val splitDate = date.split('-')
+        val month = months[splitDate[1].toInt()-1]
+        val year = splitDate[0]
+        return "$month, $year "
     }
 
-    private fun dateWithYearPrecision(date : String) : String = if(isLeapYear(date.toInt())) "$date (leap year)" else "$date (not a leap year)"
-
+    private fun dateWithYearPrecision(date : String) : String {
+        val year = date.toInt()
+        val toReturn : String
+        if(isLeapYear(year)) {
+            toReturn = "$year (leap year)"
+        }else{
+            toReturn = "$year (not leap year)"
+        }
+        return toReturn
+    }
     private fun isLeapYear(year : Int) = (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)
     
 }
