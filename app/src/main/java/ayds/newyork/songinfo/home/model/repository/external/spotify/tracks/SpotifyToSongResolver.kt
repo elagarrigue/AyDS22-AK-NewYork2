@@ -1,5 +1,6 @@
 package ayds.newyork.songinfo.home.model.repository.external.spotify.tracks
 
+import ayds.newyork.songinfo.home.model.entities.DatePrecision
 import com.google.gson.Gson
 import ayds.newyork.songinfo.home.model.entities.SpotifySong
 import com.google.gson.JsonObject
