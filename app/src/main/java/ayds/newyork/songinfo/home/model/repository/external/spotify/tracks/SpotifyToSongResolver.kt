@@ -75,7 +75,7 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
 
     private fun JsonObject.getReleaseDatePrecision(): DatePrecision {
         val album = this[ALBUM].asJsonObject
-        val precisionDesdeJSON = album[RELEASE_DATE_PRECISION].asString
-        return DatePrecision.valueOf(precisionDesdeJSON)
+        val precisionFromJSON = album[RELEASE_DATE_PRECISION].asString
+        return DatePrecision.valueOf(precisionFromJSON)
     }
 }
