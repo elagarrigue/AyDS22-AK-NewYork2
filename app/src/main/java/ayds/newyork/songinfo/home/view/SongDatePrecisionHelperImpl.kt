@@ -25,7 +25,7 @@ class SongDatePrecisionHelperImpl : SongDatePrecisionHelper {
         val day = splitDate[2]
         val month = splitDate[1]
         val year = splitDate[0]
-        return "$day / $month / $year"
+        return "$day/$month/$year"
     }
 
     private fun dateWithMonthPrecision(date : String) : String {
