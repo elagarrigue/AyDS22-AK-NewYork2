@@ -18,7 +18,7 @@ internal class SongDescriptionHelperImpl(private val precisionDateHelper : SongD
                 }\n" +
                         "Artist: ${song.artistName}\n" +
                         "Album: ${song.albumName}\n" +
-                        "Release date: ${precisionDateHelper.getPrecisionDate(song.releaseDatePrecision,song.releaseDate)}"
+                        "Release date: ${precisionDateHelper.getPrecisionDate(song)}"
 
             else -> "Song not found"
         }
