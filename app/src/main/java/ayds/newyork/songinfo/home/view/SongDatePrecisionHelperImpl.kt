@@ -14,10 +14,10 @@ class SongDatePrecisionHelperImpl : SongDatePrecisionHelper {
     override fun getPrecisionDate(song : Song): String {
         val precision = song.releaseDatePrecision
         return when (precision) {
-            DatePrecision.Year -> dateWithYearPrecision(song.releaseDate)
-            DatePrecision.Month -> dateWithMonthPrecision(song.releaseDate)
-            DatePrecision.Day -> dateWithDayPrecision(song.releaseDate)
-            DatePrecision.Empty -> ""
+            DatePrecision.year -> dateWithYearPrecision(song.releaseDate)
+            DatePrecision.month -> dateWithMonthPrecision(song.releaseDate)
+            DatePrecision.day -> dateWithDayPrecision(song.releaseDate)
+            DatePrecision.empty -> ""
         }
     }
     private fun dateWithDayPrecision(date : String) : String{
