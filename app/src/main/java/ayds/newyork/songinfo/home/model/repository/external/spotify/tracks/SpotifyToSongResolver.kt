@@ -22,7 +22,7 @@ private const val URL = "url"
 private const val EXTERNAL_URL = "external_urls"
 private const val SPOTIFY = "spotify"
 
-internal class JsonToSongResolver : SpotifyToSongResolver {
+internal class JsonToSongResolver(private val precisionMapper: DatePrecisionMapper) : SpotifyToSongResolver {
 
     override fun getSongFromExternalData(serviceData: String?): SpotifySong? =
         try {
@@ -75,13 +75,7 @@ internal class JsonToSongResolver : SpotifyToSongResolver {
 
     private fun JsonObject.getReleaseDatePrecision(): DatePrecision {
         val album = this[ALBUM].asJsonObject
-        val precisionFromJSON = album[RELEASE_DATE_PRECISION].asString
-        val NewPrecisionFromJSON = when(precisionFromJSON){
-            "day" -> "day"
-            "month" -> "month"
-            "year" -> "year"
-            else -> precisionFromJSON
-        }
-        return DatePrecision.valueOf(NewPrecisionFromJSON)
+        val precisionStringFromJson = album[RELEASE_DATE_PRECISION].asString
+        return precisionMapper.getDatePrecisionFromString(precisionStringFromJson)
     }
 }

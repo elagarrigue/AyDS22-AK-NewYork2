@@ -30,7 +30,7 @@ object EmptySong : Song {
     override val artistName: String = ""
     override val albumName: String = ""
     override val releaseDate: String = ""
-    override val releaseDatePrecision: DatePrecision = DatePrecision.year
+    override val releaseDatePrecision: DatePrecision = DatePrecision.YEAR
     override val spotifyUrl: String = ""
     override val imageUrl: String = ""
     override var isLocallyStored: Boolean = false
