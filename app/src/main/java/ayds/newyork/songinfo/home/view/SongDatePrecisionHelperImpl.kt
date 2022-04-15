@@ -17,9 +17,9 @@ class SongDatePrecisionHelperImpl : SongDatePrecisionHelper {
             DatePrecision.year -> dateWithYearPrecision(song.releaseDate)
             DatePrecision.month -> dateWithMonthPrecision(song.releaseDate)
             DatePrecision.day -> dateWithDayPrecision(song.releaseDate)
-            DatePrecision.empty -> ""
         }
     }
+
     private fun dateWithDayPrecision(date : String) : String{
         val splitDate = date.split('-')
         val day = splitDate[2]
@@ -45,6 +45,6 @@ class SongDatePrecisionHelperImpl : SongDatePrecisionHelper {
         }
         return toReturn
     }
+
     private fun isLeapYear(year : Int) = (year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)
-    
 }
