@@ -7,13 +7,14 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object SpotifyTrackInjector {
 
+    private val datePrecisionMapper : DatePrecisionMapper = DatePrecisionMapperImpl()
     private const val SPOTIFY_URL = "https://api.spotify.com/v1/"
     private val spotifyAPIRetrofit = Retrofit.Builder()
         .baseUrl(SPOTIFY_URL)
         .addConverterFactory(ScalarsConverterFactory.create())
         .build()
     private val spotifyTrackAPI = spotifyAPIRetrofit.create(SpotifyTrackAPI::class.java)
-    private val spotifyToSongResolver: SpotifyToSongResolver = JsonToSongResolver()
+    private val spotifyToSongResolver: SpotifyToSongResolver = JsonToSongResolver(datePrecisionMapper)
 
 
     val spotifyTrackService: SpotifyTrackService = SpotifyTrackServiceImpl(
