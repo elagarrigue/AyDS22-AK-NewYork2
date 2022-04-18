@@ -33,13 +33,8 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     fun getARtistInfo(artistName: String?) {
+        val NYTimesAPI = initializeAPI()
 
-        // create
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.nytimes.com/svc/search/v2/")
-            .addConverterFactory(ScalarsConverterFactory.create())
-            .build()
-        val NYTimesAPI = retrofit.create(NYTimesAPI::class.java)
         Log.e("TAG", "artistName $artistName")
         Thread {
             var text = DataBase.getInfo(dataBase, artistName)
@@ -85,6 +80,16 @@ class OtherInfoWindow : AppCompatActivity() {
                 textPane2!!.text = Html.fromHtml(finalText)
             }
         }.start()
+    }
+
+    private fun initializeAPI(): NYTimesAPI {
+        // create
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://api.nytimes.com/svc/search/v2/")
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+        val NYTimesAPI = retrofit.create(NYTimesAPI::class.java)
+        return NYTimesAPI
     }
 
     private var dataBase: DataBase? = null
