@@ -6,12 +6,8 @@ import android.os.Bundle
 import ayds.newyork.songinfo.R
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import ayds.newyork.songinfo.moredetails.fulllogic.NYTimesAPI
-import ayds.newyork.songinfo.moredetails.fulllogic.DataBase
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.JsonElement
-import ayds.newyork.songinfo.moredetails.fulllogic.OtherInfoWindow
 import android.content.Intent
 import android.net.Uri
 import com.squareup.picasso.Picasso
@@ -22,6 +18,7 @@ import android.widget.ImageView
 import retrofit2.Response
 import java.io.IOException
 import java.lang.StringBuilder
+import java.util.*
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
@@ -108,7 +105,7 @@ class OtherInfoWindow : AppCompatActivity() {
             val textWithBold = text
                 .replace("'", " ")
                 .replace("\n", "<br>")
-                .replace("(?i)" + term!!.toRegex(), "<b>" + term.toUpperCase() + "</b>")
+                .replace("(?i)" + term!!.toRegex(), "<b>" + term.toUpperCase(Locale.getDefault()) + "</b>")
             builder.append(textWithBold)
             builder.append("</font></div></html>")
             return builder.toString()
