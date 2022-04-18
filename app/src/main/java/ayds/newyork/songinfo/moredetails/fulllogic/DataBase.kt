@@ -9,6 +9,7 @@ import android.util.Log
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.SQLException
+import java.sql.Statement
 import java.util.ArrayList
 
 class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
@@ -26,12 +27,10 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
         fun testDB() {
             var dataBaseConnection: Connection? = null
             val dataBaseUrl : String = "jdbc:sqlite:./dictionary.db"
-            val statementTimeOut : Int = 30
             val sqlQuery : String = "select * from artists"
             try {
-                dataBaseConnection = DriverManager.getConnection(dataBaseUrl)
-                val statement = dataBaseConnection.createStatement()
-                statement.queryTimeout = statementTimeOut
+                dataBaseConnection = createConnectionDataBase(dataBaseUrl)
+                val statement = createStatementDataBase(dataBaseConnection)
                 val rs = statement.executeQuery(sqlQuery)
                 while (rs.next()) {
                     println("id = " + rs.getInt("id"))
@@ -48,6 +47,19 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
                     System.err.println(closeFailException)
                 }
             }
+        }
+
+        private fun createConnectionDataBase(dataBaseUrl : String) : Connection{
+            var dataBaseConnection: Connection? = null
+            dataBaseConnection = DriverManager.getConnection(dataBaseUrl)
+            return dataBaseConnection
+        }
+
+        private fun createStatementDataBase(dataBaseConnection : Connection) : Statement{
+            val statementTimeOut : Int = 30
+            val statement = dataBaseConnection.createStatement()
+            statement.queryTimeout = statementTimeOut
+            return statement
         }
 
         fun saveArtist(dbHelper: DataBase, artist: String?, info: String?) {
