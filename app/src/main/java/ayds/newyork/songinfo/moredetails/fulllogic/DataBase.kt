@@ -12,14 +12,14 @@ import java.sql.SQLException
 import java.util.ArrayList
 
 class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", null, 1) {
-    override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL(
-            "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
-        )
+
+    override fun onCreate(dataBase: SQLiteDatabase) {
+        val createQuery : String =  "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
+        dataBase.execSQL(createQuery)
         Log.i("DB", "DB created")
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+    override fun onUpgrade(dataBase: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
     companion object {
         fun testDB() {
