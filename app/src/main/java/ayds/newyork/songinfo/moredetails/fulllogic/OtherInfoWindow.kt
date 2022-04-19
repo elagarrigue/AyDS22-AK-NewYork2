@@ -11,10 +11,10 @@ import com.google.gson.JsonObject
 import android.content.Intent
 import android.net.Uri
 import com.squareup.picasso.Picasso
-import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.core.text.HtmlCompat
 import retrofit2.Response
 import java.io.IOException
 import java.lang.StringBuilder
@@ -30,8 +30,8 @@ class OtherInfoWindow : AppCompatActivity() {
         open(intent.getStringExtra("artistName"))
     }
 
-    fun getARtistInfo(artistName: String?) {
-        val NYTimesAPI = initializeAPI()
+    private fun getArtistInfo(artistName: String?) {
+        val newYorkTimesAPI = initializeAPI()
 
         Log.e("TAG", "artistName $artistName")
         Thread {
@@ -41,7 +41,7 @@ class OtherInfoWindow : AppCompatActivity() {
             } else {
                 val callResponse: Response<String>
                 try {
-                    callResponse = NYTimesAPI.getArtistInfo(artistName).execute()
+                    callResponse = newYorkTimesAPI.getArtistInfo(artistName).execute()
                     Log.e("TAG", "JSON " + callResponse.body())
                     val gson = Gson()
                     val javaObject = gson.fromJson(callResponse.body(), JsonObject::class.java)
@@ -77,10 +77,9 @@ class OtherInfoWindow : AppCompatActivity() {
         val imageUrl =
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
         Log.e("TAG", "Get Image from $imageUrl")
-        val finalText = text
         runOnUiThread {
             Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
-            textPane2!!.text = Html.fromHtml(finalText)
+            textPane2!!.text = HtmlCompat.fromHtml(text.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
 
@@ -89,8 +88,7 @@ class OtherInfoWindow : AppCompatActivity() {
             .baseUrl("https://api.nytimes.com/svc/search/v2/")
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        val NYTimesAPI = retrofit.create(NYTimesAPI::class.java)
-        return NYTimesAPI
+        return retrofit.create(NYTimesAPI::class.java)
     }
 
     private var dataBase: DataBase? = null
@@ -99,22 +97,22 @@ class OtherInfoWindow : AppCompatActivity() {
         DataBase.saveArtist(dataBase, "test", "sarasa")
         Log.e("TAG", "" + DataBase.getInfo(dataBase, "test"))
         Log.e("TAG", "" + DataBase.getInfo(dataBase, "nada"))
-        getARtistInfo(artist)
+        getArtistInfo(artist)
     }
 
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
         fun textToHtml(text: String, term: String?): String {
-            val builder = StringBuilder()
-            builder.append("<html><div width=400>")
-            builder.append("<font face=\"arial\">")
+            val stringBuilder = StringBuilder()
+            stringBuilder.append("<html><div width=400>")
+            stringBuilder.append("<font face=\"arial\">")
             val textWithBold = text
                 .replace("'", " ")
                 .replace("\n", "<br>")
-                .replace("(?i)" + term!!.toRegex(), "<b>" + term.toUpperCase(Locale.getDefault()) + "</b>")
-            builder.append(textWithBold)
-            builder.append("</font></div></html>")
-            return builder.toString()
+                .replace("(?i)" + term!!.toRegex(), "<b>" + term.uppercase(Locale.getDefault()) + "</b>")
+            stringBuilder.append(textWithBold)
+            stringBuilder.append("</font></div></html>")
+            return stringBuilder.toString()
         }
     }
 }
