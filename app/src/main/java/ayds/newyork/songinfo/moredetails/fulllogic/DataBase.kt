@@ -50,43 +50,42 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
             }
         }
 
-        private fun createConnectionDataBase(dataBaseUrl : String) : Connection{
-            var dataBaseConnection: Connection? = null
-            dataBaseConnection = DriverManager.getConnection(dataBaseUrl)
-            return dataBaseConnection
-        }
-
-        private fun createStatementDataBase(dataBaseConnection : Connection) : Statement{
-            val statementTimeOut : Int = 30
-            val statement = dataBaseConnection.createStatement()
-            statement.queryTimeout = statementTimeOut
-            return statement
-        }
-
-        private fun closeConnectionDataBase(dataBaseConnection : Connection?) {
-            try {
-                dataBaseConnection?.close()
-            } catch (closeFailException : SQLException) {
-                System.err.println(closeFailException)
+            private fun createConnectionDataBase(dataBaseUrl : String) : Connection{
+                var dataBaseConnection: Connection? = null
+                dataBaseConnection = DriverManager.getConnection(dataBaseUrl)
+                return dataBaseConnection
             }
 
+            private fun createStatementDataBase(dataBaseConnection : Connection) : Statement{
+                val statementTimeOut : Int = 30
+                val statement = dataBaseConnection.createStatement()
+                statement.queryTimeout = statementTimeOut
+                return statement
+            }
 
-        fun saveArtist(dbHelper: DataBase, artist: String?, info: String?) {
-            // Gets the data repository in write mode
+            private fun closeConnectionDataBase(dataBaseConnection : Connection?) {
+                try {
+                    dataBaseConnection?.close()
+                } catch (closeFailException: SQLException) {
+                    System.err.println(closeFailException)
+                }
+            }
 
-            val db = dbHelper.writableDatabase
+            fun saveArtist(dbHelper: DataBase, artist: String?, info: String?) {
+                val db = dbHelper.writableDatabase
+                val values = createMapValues(artist, info)
+                val newRowId = db.insert("$tableArtists", null, values)
+            }
+            
+            private fun createMapValues(artist : String?, info : String?): ContentValues{
+                val values = ContentValues()
+                values.put(artistColumn, artist)
+                values.put(infoColumn, info)
+                values.put(sourceColumn, 1)
+                return values
+            }
 
-            // Create a new map of values, where column names are the keys
-            val values = ContentValues()
-            values.put(artistColumn, artist)
-            values.put(infoColumn, info)
-            values.put(sourceColumn, 1)
-
-            // Insert the new row, returning the primary key value of the new row
-            val newRowId = db.insert("$tableArtists", null, values)
-        }
-
-        fun getInfo(dbHelper: DataBase, artist: String): String? {
+            fun getInfo(dbHelper: DataBase, artist: String): String? {
             val db = dbHelper.readableDatabase
 
             // Define a projection that specifies which columns from the database
