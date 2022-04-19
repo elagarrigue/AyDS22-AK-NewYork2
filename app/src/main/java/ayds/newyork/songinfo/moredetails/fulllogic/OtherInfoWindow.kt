@@ -23,8 +23,6 @@ import java.util.*
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
 
-    //private JPanel imagePanel;
-    // private JLabel posterImageLabel;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
@@ -37,53 +35,56 @@ class OtherInfoWindow : AppCompatActivity() {
 
         Log.e("TAG", "artistName $artistName")
         Thread {
-            var text = DataBase.getInfo(dataBase, artistName)
-            if (text != null) { // exists in db
-                text = "[*]$text"
-            } else { // get from service
+            var textFromNYTimes = DataBase.getInfo(dataBase, artistName)
+            if (textFromNYTimes != null) {
+                textFromNYTimes = "[*]$textFromNYTimes"
+            } else {
                 val callResponse: Response<String>
                 try {
                     callResponse = NYTimesAPI.getArtistInfo(artistName).execute()
                     Log.e("TAG", "JSON " + callResponse.body())
                     val gson = Gson()
-                    val jobj = gson.fromJson(callResponse.body(), JsonObject::class.java)
-                    val response = jobj["response"].asJsonObject
-                    val _abstract = response["docs"].asJsonArray[0].asJsonObject["abstract"]
-                    val url = response["docs"].asJsonArray[0].asJsonObject["web_url"]
-                    if (_abstract == null) {
-                        text = "No Results"
+                    val javaObject = gson.fromJson(callResponse.body(), JsonObject::class.java)
+                    val response = javaObject["response"].asJsonObject
+                    val abstract = response["docs"].asJsonArray[0].asJsonObject["abstract"]
+                    val articleUrl = response["docs"].asJsonArray[0].asJsonObject["web_url"]
+                    if (abstract == null) {
+                        textFromNYTimes = "No Results"
                     } else {
-                        text = _abstract.asString.replace("\\n", "\n")
-                        text = textToHtml(text, artistName)
-
-
-                        // save to DB  <o/
-                        DataBase.saveArtist(dataBase, artistName, text)
+                        textFromNYTimes = abstract.asString.replace("\\n", "\n")
+                        textFromNYTimes = textToHtml(textFromNYTimes, artistName)
+                        DataBase.saveArtist(dataBase, artistName, textFromNYTimes)
                     }
-                    val urlString = url.asString
-                    findViewById<View>(R.id.openUrlButton).setOnClickListener {
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.data = Uri.parse(urlString)
-                        startActivity(intent)
-                    }
+                    createButtonWithLink(articleUrl.asString)
                 } catch (e1: IOException) {
                     Log.e("TAG", "Error $e1")
                     e1.printStackTrace()
                 }
             }
-            val imageUrl =
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
-            Log.e("TAG", "Get Image from $imageUrl")
-            val finalText = text
-            runOnUiThread {
-                Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
-                textPane2!!.text = Html.fromHtml(finalText)
-            }
+            applyImageAndText(textFromNYTimes)
         }.start()
     }
 
+    private fun createButtonWithLink(urlString: String?) {
+        findViewById<View>(R.id.openUrlButton).setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(urlString)
+            startActivity(intent)
+        }
+    }
+
+    private fun applyImageAndText(text: String?) {
+        val imageUrl =
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
+        Log.e("TAG", "Get Image from $imageUrl")
+        val finalText = text
+        runOnUiThread {
+            Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
+            textPane2!!.text = Html.fromHtml(finalText)
+        }
+    }
+
     private fun initializeAPI(): NYTimesAPI {
-        // create
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.nytimes.com/svc/search/v2/")
             .addConverterFactory(ScalarsConverterFactory.create())
