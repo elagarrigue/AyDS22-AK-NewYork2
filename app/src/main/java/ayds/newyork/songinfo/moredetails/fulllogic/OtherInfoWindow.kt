@@ -68,6 +68,26 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
+    private fun getTextFromExternal(artistInfo: JsonObject?, artistName: String?): String {
+        var result : String
+        val abstract = getAbstractFromArtistInfo(artistInfo)
+        if (abstract == null) {
+            result = "No Results"
+        } else {
+            result = abstract.replace("\\n", "\n")
+            result = textToHtml(result, artistName)
+        }
+        return result
+    }
+
+    private fun getAbstractFromArtistInfo(artistInfo : JsonObject?) : String? {
+        return artistInfo!!["docs"].asJsonArray[0].asJsonObject["abstract"].asString
+    }
+
+    private fun getURLFromArtistInfo(artistInfo: JsonObject?) : String? {
+        return artistInfo!!["docs"].asJsonArray[0].asJsonObject["web_url"].asString
+    }
+
     private fun createButtonWithLink(urlString: String?) {
         findViewById<View>(R.id.openUrlButton).setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
