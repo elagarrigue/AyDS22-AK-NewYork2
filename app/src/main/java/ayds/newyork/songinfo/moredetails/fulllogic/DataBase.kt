@@ -1,24 +1,16 @@
 package ayds.newyork.songinfo.moredetails.fulllogic
 
-import android.database.sqlite.SQLiteOpenHelper
-import android.database.sqlite.SQLiteDatabase
-import ayds.newyork.songinfo.moredetails.fulllogic.DataBase
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
-import android.util.Log
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.SQLException
-import java.sql.Statement
-import java.util.ArrayList
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 
 class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", null, 1){
 
     override fun onCreate(dataBase: SQLiteDatabase){
         val createQuery : String =  "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
         dataBase.execSQL(createQuery)
-        Log.i("DB", "DB created")
     }
 
     override fun onUpgrade(dataBase: SQLiteDatabase, oldVersion: Int, newVersion: Int){}
@@ -29,48 +21,6 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
         private const val sourceColumn : String = "source"
         private const val idColumn : String = "id"
         private const val tableArtists : String = "artists"
-
-        fun testDB(){
-            var dataBaseConnection: Connection? = null
-            val dataBaseUrl : String = "jdbc:sqlite:./dictionary.db"
-            val sqlQuery : String = "select * from $tableArtists"
-            try {
-                dataBaseConnection = createConnectionDataBase(dataBaseUrl)
-                val statement = createStatementDataBase(dataBaseConnection)
-                val rs = statement.executeQuery(sqlQuery)
-                while (rs.next()) {
-                    println("$idColumn = " + rs.getInt(idColumn))
-                    println("$artistColumn = " + rs.getString(artistColumn))
-                    println("$infoColumn = " + rs.getString(infoColumn))
-                    println("$sourceColumn = " + rs.getString(sourceColumn))
-                }
-            } catch (exception : SQLException) {
-                System.err.println(exception.message)
-            } finally {
-                closeConnectionDataBase(dataBaseConnection)
-            }
-        }
-
-        private fun createConnectionDataBase(dataBaseUrl : String) : Connection{
-            var dataBaseConnection: Connection? = null
-            dataBaseConnection = DriverManager.getConnection(dataBaseUrl)
-            return dataBaseConnection
-        }
-
-        private fun createStatementDataBase(dataBaseConnection : Connection) : Statement{
-            val statementTimeOut : Int = 30
-            val statement = dataBaseConnection.createStatement()
-            statement.queryTimeout = statementTimeOut
-            return statement
-        }
-
-        private fun closeConnectionDataBase(dataBaseConnection : Connection?){
-            try {
-                dataBaseConnection?.close()
-            } catch (closeFailException: SQLException) {
-                System.err.println(closeFailException)
-            }
-        }
 
         fun saveArtist(dbHelper: DataBase, artist: String?, info: String?){
             val db = dbHelper.writableDatabase
