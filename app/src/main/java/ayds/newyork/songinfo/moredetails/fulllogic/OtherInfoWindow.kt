@@ -20,6 +20,9 @@ import java.io.IOException
 import java.lang.StringBuilder
 import java.util.*
 
+private const val NY_TIMES_URL = "https://api.nytimes.com/svc/search/v2/"
+private const val NY_TIMES_IMG = ""
+
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
 
@@ -85,7 +88,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun initializeAPI(): NYTimesAPI {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.nytimes.com/svc/search/v2/")
+            .baseUrl(NY_TIMES_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
         return retrofit.create(NYTimesAPI::class.java)
