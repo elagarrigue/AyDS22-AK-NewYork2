@@ -34,35 +34,17 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getArtistInfo(artistName: String?) {
-        val newYorkTimesAPI = initializeAPI()
-
         Log.e("TAG", "artistName $artistName")
         Thread {
             var textFromNYTimes = DataBase.getInfo(dataBase, artistName)
             if (textFromNYTimes != null) {
                 textFromNYTimes = "[*]$textFromNYTimes"
             } else {
-                val callResponse: Response<String>
-                try {
-                    callResponse = newYorkTimesAPI.getArtistInfo(artistName).execute()
-                    Log.e("TAG", "JSON " + callResponse.body())
-                    val gson = Gson()
-                    val javaObject = gson.fromJson(callResponse.body(), JsonObject::class.java)
-                    val response = javaObject["response"].asJsonObject
-                    val abstract = response["docs"].asJsonArray[0].asJsonObject["abstract"]
-                    val articleUrl = response["docs"].asJsonArray[0].asJsonObject["web_url"]
-                    if (abstract == null) {
-                        textFromNYTimes = "No Results"
-                    } else {
-                        textFromNYTimes = abstract.asString.replace("\\n", "\n")
-                        textFromNYTimes = textToHtml(textFromNYTimes, artistName)
-                        DataBase.saveArtist(dataBase, artistName, textFromNYTimes)
-                    }
-                    createButtonWithLink(articleUrl.asString)
-                } catch (e1: IOException) {
-                    Log.e("TAG", "Error $e1")
-                    e1.printStackTrace()
-                }
+                val artistInfoFromExternal = getArtistInfoFromServiceAsJsonObject(artistName)
+                textFromNYTimes = getTextFromExternal(artistInfoFromExternal, artistName)
+                val articleUrl = getURLFromArtistInfo(artistInfoFromExternal)
+                DataBase.saveArtist(dataBase, artistName, textFromNYTimes)
+                createButtonWithLink(articleUrl)
             }
             applyImageAndText(textFromNYTimes)
         }.start()
