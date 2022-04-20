@@ -94,6 +94,26 @@ class OtherInfoWindow : AppCompatActivity() {
         return retrofit.create(NYTimesAPI::class.java)
     }
 
+    private fun getRawArtistInfoFromService(artistName: String?) : Response<String>{
+        val nyTimesAPI = initializeAPI()
+        return nyTimesAPI.getArtistInfo(artistName).execute()
+    }
+
+    private fun getArtistInfoFromServiceAsJsonObject(artistName: String?): JsonObject? {
+        val rawArtistInfo: Response<String>
+        var result: JsonObject? = null
+        try{
+            rawArtistInfo = getRawArtistInfoFromService(artistName)
+            Log.e("TAG", "JSON " + rawArtistInfo.body())
+            val javaObject = Gson().fromJson(rawArtistInfo.body(), JsonObject::class.java)
+            result = javaObject["response"].asJsonObject
+        } catch (e: IOException){
+            Log.e("TAG", "Error $e")
+            e.printStackTrace()
+        }
+        return result
+    }
+
     private var dataBase: DataBase? = null
     private fun open(artist: String?) {
         dataBase = DataBase(this)
