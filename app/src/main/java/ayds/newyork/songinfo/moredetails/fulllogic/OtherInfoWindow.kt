@@ -129,4 +129,8 @@ class OtherInfoWindow : AppCompatActivity() {
         stringBuilder.append("</font></div></html>")
         return stringBuilder.toString()
     }
+
+    companion object {
+        const val ARTIST_NAME_EXTRA = "artistName"
+    }
 }
