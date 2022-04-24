@@ -11,7 +11,6 @@ import com.google.gson.JsonObject
 import android.content.Intent
 import android.net.Uri
 import com.squareup.picasso.Picasso
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.core.text.HtmlCompat
