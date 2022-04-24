@@ -47,11 +47,17 @@ class OtherInfoWindow : AppCompatActivity() {
             if (abstractNYTimes != null) {
                 abstractNYTimes = "[*]$abstractNYTimes"
             } else {
-                val artistInfoFromExternal = getArtistInfoFromServiceAsJsonObject()
-                abstractNYTimes = getTextFromExternal(artistInfoFromExternal)
-                val articleUrl = getURLFromArtistInfo(artistInfoFromExternal)
-                DataBase.saveArtist(dataBase, artistName, abstractNYTimes)
-                createButtonWithLink(articleUrl)
+                var articleUrl : String?
+                try {
+                    val artistInfoJsonObject = getArtistInfoFromExternal()
+                    abstractNYTimes = getTextFromExternal(artistInfoJsonObject)
+                    articleUrl = getURLFromArtistInfo(artistInfoJsonObject)
+                    DataBase.saveArtist(dataBase, artistName, abstractNYTimes)
+                    createButtonWithLink(articleUrl)
+                } catch (error : Exception){
+                    abstractNYTimes = "No se encontró"
+                    articleUrl = "http://www.google.com"
+                }
             }
             applyImageAndText()
         }.start()
