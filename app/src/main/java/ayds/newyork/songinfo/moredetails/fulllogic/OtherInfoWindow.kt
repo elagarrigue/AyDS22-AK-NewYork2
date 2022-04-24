@@ -25,33 +25,35 @@ private const val NY_TIMES_IMG = "https://encrypted-tbn0.gstatic.com/images?q=tb
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
     private var dataBase: DataBase? = null
+    private var artistName: String? = null
+    private var abstractNYTimes: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         textPane2 = findViewById(R.id.textPane2)
         initializeDatabase()
-        getArtistInfo(obtainArtistName())
+        obtainArtistName()
+        getArtistInfo()
     }
 
-    private fun obtainArtistName() : String? {
-        return intent.getStringExtra("artistName")
+    private fun obtainArtistName(){
+        artistName = intent.getStringExtra("artistName")
     }
 
-    private fun getArtistInfo(artistName: String?) {
-        Log.e("TAG", "artistName $artistName")
+    private fun getArtistInfo() {
         Thread {
-            var textFromNYTimes = DataBase.getInfo(dataBase, artistName)
-            if (textFromNYTimes != null) {
-                textFromNYTimes = "[*]$textFromNYTimes"
+            abstractNYTimes = DataBase.getInfo(dataBase, artistName)
+            if (abstractNYTimes != null) {
+                abstractNYTimes = "[*]$abstractNYTimes"
             } else {
-                val artistInfoFromExternal = getArtistInfoFromServiceAsJsonObject(artistName)
-                textFromNYTimes = getTextFromExternal(artistInfoFromExternal)
+                val artistInfoFromExternal = getArtistInfoFromServiceAsJsonObject()
+                abstractNYTimes = getTextFromExternal(artistInfoFromExternal)
                 val articleUrl = getURLFromArtistInfo(artistInfoFromExternal)
-                DataBase.saveArtist(dataBase, artistName, textFromNYTimes)
+                DataBase.saveArtist(dataBase, artistName, abstractNYTimes)
                 createButtonWithLink(articleUrl)
             }
-            applyImageAndText(textFromNYTimes)
+            applyImageAndText()
         }.start()
     }
 
@@ -78,10 +80,10 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    private fun applyImageAndText(text: String?) {
+    private fun applyImageAndText() {
         runOnUiThread {
             Picasso.get().load(NY_TIMES_IMG).into(findViewById<View>(R.id.imageView) as ImageView)
-            textPane2!!.text = HtmlCompat.fromHtml(text.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)
+            textPane2!!.text = HtmlCompat.fromHtml(textToHtml(abstractNYTimes!!, artistName), HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
 
@@ -93,16 +95,16 @@ class OtherInfoWindow : AppCompatActivity() {
         return retrofit.create(NYTimesAPI::class.java)
     }
 
-    private fun getRawArtistInfoFromService(artistName: String?) : Response<String>{
+    private fun getRawArtistInfoFromService() : Response<String>{
         val nyTimesAPI = initializeAPI()
         return nyTimesAPI.getArtistInfo(artistName).execute()
     }
 
-    private fun getArtistInfoFromServiceAsJsonObject(artistName: String?): JsonObject? {
+    private fun getArtistInfoFromServiceAsJsonObject(): JsonObject? {
         val rawArtistInfo: Response<String>
         var result: JsonObject? = null
         try{
-            rawArtistInfo = getRawArtistInfoFromService(artistName)
+            rawArtistInfo = getRawArtistInfoFromService()
             val javaObject = Gson().fromJson(rawArtistInfo.body(), JsonObject::class.java)
             result = javaObject["response"].asJsonObject
         } catch (e: IOException){
@@ -115,7 +117,7 @@ class OtherInfoWindow : AppCompatActivity() {
         dataBase = DataBase(this)
     }
 
-    fun textToHtml(text: String, term: String?): String {
+    private fun textToHtml(text: String, term: String?): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append("<html><div width=400>")
         stringBuilder.append("<font face=\"arial\">")
