@@ -71,11 +71,11 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getAbstractFromArtistInfo(artistInfo : JsonObject?) : String? {
-        return artistInfo!!["docs"].asJsonArray[0].asJsonObject["abstract"].asString
+        return artistInfo!!["response"].asJsonObject["docs"].asJsonArray[0].asJsonObject["abstract"].asString
     }
 
     private fun getURLFromArtistInfo(artistInfo: JsonObject?) : String? {
-        return artistInfo!!["docs"].asJsonArray[0].asJsonObject["web_url"].asString
+        return artistInfo!!["response"].asJsonObject["docs"].asJsonArray[0].asJsonObject["web_url"].asString
     }
 
     private fun createButtonWithLink(urlString: String?) {
@@ -101,18 +101,25 @@ class OtherInfoWindow : AppCompatActivity() {
         return retrofit.create(NYTimesAPI::class.java)
     }
 
-    private fun getRawArtistInfoFromService() : Response<String>{
+    private fun getRawArtistInfoFromExternal() : Response<String>{
         val nyTimesAPI = initializeAPI()
         return nyTimesAPI.getArtistInfo(artistName).execute()
     }
 
-    private fun getArtistInfoFromServiceAsJsonObject(): JsonObject? {
-        val rawArtistInfo: Response<String>
+    private fun convertResponseToJsonObject(resp : Response<String>) : JsonObject?{
+        return Gson().fromJson(resp.body(), JsonObject::class.java)
+        //return javaObject["response"].asJsonObject
+        //return Gson().fromJson(resp.body(), JsonObject::class.java)["response"].asJsonObject
+    }
+
+    private fun getArtistInfoFromExternal(): JsonObject? {
+        val rawArtistInfoFromService: Response<String>
+
         var result: JsonObject? = null
         try{
-            rawArtistInfo = getRawArtistInfoFromService()
-            val javaObject = Gson().fromJson(rawArtistInfo.body(), JsonObject::class.java)
-            result = javaObject["response"].asJsonObject
+            rawArtistInfoFromService = getRawArtistInfoFromExternal()
+            println(rawArtistInfoFromService.toString())
+            result = convertResponseToJsonObject(rawArtistInfoFromService)
         } catch (e: IOException){
             e.printStackTrace()
         }
