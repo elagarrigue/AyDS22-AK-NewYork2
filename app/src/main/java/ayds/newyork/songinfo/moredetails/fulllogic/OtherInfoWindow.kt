@@ -21,7 +21,7 @@ import java.lang.StringBuilder
 import java.util.*
 
 private const val NY_TIMES_URL = "https://api.nytimes.com/svc/search/v2/"
-private const val NY_TIMES_IMG = ""
+private const val NY_TIMES_IMG = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
@@ -84,11 +84,8 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun applyImageAndText(text: String?) {
-        val imageUrl =
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
-        Log.e("TAG", "Get Image from $imageUrl")
         runOnUiThread {
-            Picasso.get().load(imageUrl).into(findViewById<View>(R.id.imageView) as ImageView)
+            Picasso.get().load(NY_TIMES_IMG).into(findViewById<View>(R.id.imageView) as ImageView)
             textPane2!!.text = HtmlCompat.fromHtml(text.toString(), HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
@@ -111,11 +108,9 @@ class OtherInfoWindow : AppCompatActivity() {
         var result: JsonObject? = null
         try{
             rawArtistInfo = getRawArtistInfoFromService(artistName)
-            Log.e("TAG", "JSON " + rawArtistInfo.body())
             val javaObject = Gson().fromJson(rawArtistInfo.body(), JsonObject::class.java)
             result = javaObject["response"].asJsonObject
         } catch (e: IOException){
-            Log.e("TAG", "Error $e")
             e.printStackTrace()
         }
         return result
