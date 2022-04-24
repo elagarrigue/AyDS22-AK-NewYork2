@@ -116,19 +116,16 @@ class OtherInfoWindow : AppCompatActivity() {
         dataBase = DataBase(this)
     }
 
-    companion object {
-        const val ARTIST_NAME_EXTRA = "artistName"
-        fun textToHtml(text: String, term: String?): String {
-            val stringBuilder = StringBuilder()
-            stringBuilder.append("<html><div width=400>")
-            stringBuilder.append("<font face=\"arial\">")
-            val textWithBold = text
-                .replace("'", " ")
-                .replace("\n", "<br>")
-                .replace("(?i)" + term!!.toRegex(), "<b>" + term.uppercase(Locale.getDefault()) + "</b>")
-            stringBuilder.append(textWithBold)
-            stringBuilder.append("</font></div></html>")
-            return stringBuilder.toString()
-        }
+    fun textToHtml(text: String, term: String?): String {
+        val stringBuilder = StringBuilder()
+        stringBuilder.append("<html><div width=400>")
+        stringBuilder.append("<font face=\"arial\">")
+        val textWithBold = text
+            .replace("'", " ")
+            .replace("\n", "<br>")
+            .replace("(?i)" + term!!.toRegex(), "<b>" + term.uppercase(Locale.getDefault()) + "</b>")
+        stringBuilder.append(textWithBold)
+        stringBuilder.append("</font></div></html>")
+        return stringBuilder.toString()
     }
 }
