@@ -47,7 +47,7 @@ class OtherInfoWindow : AppCompatActivity() {
                 textFromNYTimes = "[*]$textFromNYTimes"
             } else {
                 val artistInfoFromExternal = getArtistInfoFromServiceAsJsonObject(artistName)
-                textFromNYTimes = getTextFromExternal(artistInfoFromExternal, artistName)
+                textFromNYTimes = getTextFromExternal(artistInfoFromExternal)
                 val articleUrl = getURLFromArtistInfo(artistInfoFromExternal)
                 DataBase.saveArtist(dataBase, artistName, textFromNYTimes)
                 createButtonWithLink(articleUrl)
@@ -56,14 +56,10 @@ class OtherInfoWindow : AppCompatActivity() {
         }.start()
     }
 
-    private fun getTextFromExternal(artistInfo: JsonObject?, artistName: String?): String {
-        var result : String
+    private fun getTextFromExternal(artistInfo: JsonObject?): String {
+        val result : String
         val abstract = getAbstractFromArtistInfo(artistInfo)
-        if (abstract == null) {
-            result = "No Results"
-        } else {
-            result = abstract.replace("\\n", "\n")
-        }
+        result = abstract?.replace("\\n", "\n") ?: "No Results"
         return result
     }
 
