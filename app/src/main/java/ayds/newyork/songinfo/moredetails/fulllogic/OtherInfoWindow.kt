@@ -25,12 +25,18 @@ private const val NY_TIMES_IMG = ""
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
+    private var dataBase: DataBase? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         textPane2 = findViewById(R.id.textPane2)
-        open(intent.getStringExtra("artistName"))
+        initializeDatabase()
+        getArtistInfo(obtainArtistName())
+    }
+
+    private fun obtainArtistName() : String? {
+        return intent.getStringExtra("artistName")
     }
 
     private fun getArtistInfo(artistName: String?) {
@@ -57,7 +63,6 @@ class OtherInfoWindow : AppCompatActivity() {
             result = "No Results"
         } else {
             result = abstract.replace("\\n", "\n")
-            result = textToHtml(result, artistName)
         }
         return result
     }
@@ -116,13 +121,8 @@ class OtherInfoWindow : AppCompatActivity() {
         return result
     }
 
-    private var dataBase: DataBase? = null
-    private fun open(artist: String?) {
+    private fun initializeDatabase() {
         dataBase = DataBase(this)
-        DataBase.saveArtist(dataBase, "test", "sarasa")
-        Log.e("TAG", "" + DataBase.getInfo(dataBase, "test"))
-        Log.e("TAG", "" + DataBase.getInfo(dataBase, "nada"))
-        getArtistInfo(artist)
     }
 
     companion object {
