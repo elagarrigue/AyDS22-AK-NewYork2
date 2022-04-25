@@ -76,7 +76,13 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun applyImageAndText() {
         runOnUiThread {
             Picasso.get().load(NY_TIMES_IMG).into(findViewById<View>(R.id.imageView) as ImageView)
-            textPane2!!.text = HtmlCompat.fromHtml(textToHtml(abstractNYTimes!!, artistName), HtmlCompat.FROM_HTML_MODE_LEGACY)
+            if(abstractNYTimes == null) {
+                abstractNYTimes = "No se encontró"
+            }
+            textPane2!!.text = HtmlCompat.fromHtml(
+                textToHtml(abstractNYTimes!!, artistName),
+                HtmlCompat.FROM_HTML_MODE_LEGACY
+            )
         }
     }
 
