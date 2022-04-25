@@ -21,8 +21,8 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
 
     override fun onUpgrade(dataBase: SQLiteDatabase, oldVersion: Int, newVersion: Int){}
 
-    fun saveArtist(dbHelper: DataBase, artist: String?, info: String?){
-        val db = dbHelper.writableDatabase
+    fun saveArtist(artist: String?, info: String?){
+        val db = this.writableDatabase
         val values = createMapValues(artist, info)
         val newRowId = db.insert("$tableArtists", null, values)
     }
@@ -35,20 +35,20 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
         return values
     }
 
-    fun getInfo(dbHelper: DataBase, artist: String): String? {
-        val db = dbHelper.readableDatabase
-        val cursor = createCursor(db,artist)
+    fun getInfo(artist: String): String? {
+        val cursor = createCursor(artist)
         val items: MutableList<String> = getListInfo(cursor)
         closeCursor(cursor)
         return returnFirst(items)
     }
 
-    private fun createCursor(dataBase : SQLiteDatabase, artist: String) : Cursor{
+    private fun createCursor(artist: String) : Cursor{
+        val db = this.readableDatabase
         val projection = getInfoProjection()
         val selection = getInfoSelection()
         val selectionArgs = arrayOf(artist)
         val sortOrder = getInfoSort()
-        return dataBase.query(
+        return db.query(
             "$tableArtists",
             projection,
             selection,
