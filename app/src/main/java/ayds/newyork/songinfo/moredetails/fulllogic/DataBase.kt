@@ -15,7 +15,7 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
     private val tableArtists : String = "artists"
 
     override fun onCreate(dataBase: SQLiteDatabase){
-        val createQuery : String =  "create table $tableArtists ($idColumn INTEGER PRIMARY KEY AUTOINCREMENT, $artistColumn string, $infoColumn string, $sourceColumn integer)"
+        val createQuery =  "create table $tableArtists ($idColumn INTEGER PRIMARY KEY AUTOINCREMENT, $artistColumn string, $infoColumn string, $sourceColumn integer)"
         dataBase.execSQL(createQuery)
     }
 
@@ -24,7 +24,7 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
     fun saveArtist(artist: String?, info: String?){
         val db = this.writableDatabase
         val values = createMapValues(artist, info)
-        db.insert("$tableArtists", null, values)
+        db.insert(tableArtists, null, values)
     }
 
     private fun createMapValues(artist : String?, info : String?): ContentValues{
@@ -47,7 +47,7 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
         val selectionArgs = arrayOf(artist)
         val sortOrder = getInfoSort()
         return db.query(
-            "$tableArtists",
+            tableArtists,
             projection,
             selection,
             selectionArgs,
