@@ -47,12 +47,15 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun getArtistInfo() {
         Thread {
-            abstractNYTimes = DataBase.getInfo(dataBase, artistName)
+            abstractNYTimes = dataBase!!.getInfo(artistName!!)
             if (abstractNYTimes != null) {
                 abstractNYTimes = "[*]$abstractNYTimes"
             } else {
                 try {
                     getArtistInfoFromExternal()
+                    if(abstractNYTimes != null){
+                        dataBase!!.saveArtist(artistName, abstractNYTimes)
+                    }
                     createButtonWithLink(urlNYTimes)
                 } catch(e : Exception){
                     abstractNYTimes = "No hay conexión con el servicio externo."
@@ -92,7 +95,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun String?.getFirstItem() : JsonObject {
         val jsonObject = Gson().fromJson(this, JsonObject::class.java)
-        val resp = jsonObject[RESPONSE].asJsonObject //TODO: pasar a constantes
+        val resp = jsonObject[RESPONSE].asJsonObject
         val articles = resp[DOCS].asJsonArray
         return articles[0].asJsonObject
     }
@@ -109,7 +112,7 @@ class OtherInfoWindow : AppCompatActivity() {
                 urlNYTimes = item.getUrl()
             }
         } catch(e : Exception){
-            abstractNYTimes = "No se encontró"
+            abstractNYTimes = null
         }
     }
 
