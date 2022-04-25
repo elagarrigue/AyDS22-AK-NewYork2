@@ -15,7 +15,7 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
     private val tableArtists : String = "artists"
 
     override fun onCreate(dataBase: SQLiteDatabase){
-        val createQuery : String =  "create table artists (id INTEGER PRIMARY KEY AUTOINCREMENT, artist string, info string, source integer)"
+        val createQuery : String =  "create table $tableArtists ($idColumn INTEGER PRIMARY KEY AUTOINCREMENT, $artistColumn string, $infoColumn string, $sourceColumn integer)"
         dataBase.execSQL(createQuery)
     }
 
