@@ -15,12 +15,15 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.text.HtmlCompat
 import retrofit2.Response
-import java.io.IOException
 import java.lang.StringBuilder
 import java.util.*
 
 private const val NY_TIMES_URL = "https://api.nytimes.com/svc/search/v2/"
 private const val NY_TIMES_IMG = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
+private const val RESPONSE = "response"
+private const val DOCS = "docs"
+private const val ABSTRACT  = "abstract"
+private const val WEB_URL = "web_url"
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
@@ -89,8 +92,8 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun String?.getFirstItem() : JsonObject {
         val jsonObject = Gson().fromJson(this, JsonObject::class.java)
-        val resp = jsonObject["response"].asJsonObject //TODO: pasar a constantes
-        val articles = resp["docs"].asJsonArray
+        val resp = jsonObject[RESPONSE].asJsonObject //TODO: pasar a constantes
+        val articles = resp[DOCS].asJsonArray
         return articles[0].asJsonObject
     }
 
@@ -111,11 +114,11 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun JsonObject.getAbstract(): String? {
-        return this["abstract"].asString
+        return this[ABSTRACT].asString
     }
 
     private fun JsonObject.getUrl(): String? {
-        return this["web_url"].asString
+        return this[WEB_URL].asString
     }
 
     private fun initializeDatabase() {
