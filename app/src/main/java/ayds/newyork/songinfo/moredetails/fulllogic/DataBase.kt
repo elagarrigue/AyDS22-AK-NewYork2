@@ -21,17 +21,17 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
 
     override fun onUpgrade(dataBase: SQLiteDatabase, oldVersion: Int, newVersion: Int){}
 
-    fun saveArtist(artist: String?, info: String?){
+    fun saveArtist(artist: String?, info: String?, url: String?){
         val db = this.writableDatabase
-        val values = createMapValues(artist, info)
+        val values = createMapValues(artist, info, url)
         db.insert(tableArtists, null, values)
     }
 
-    private fun createMapValues(artist : String?, info : String?): ContentValues{
+    private fun createMapValues(artist : String?, info : String?, url: String?): ContentValues{
         val values = ContentValues()
         values.put(artistColumn, artist)
         values.put(infoColumn, info)
-        values.put(sourceColumn, 1)
+        values.put(sourceColumn, url)
         return values
     }
 

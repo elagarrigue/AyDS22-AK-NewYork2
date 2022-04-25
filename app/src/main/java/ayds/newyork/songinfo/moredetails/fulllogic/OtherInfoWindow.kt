@@ -54,7 +54,7 @@ class OtherInfoWindow : AppCompatActivity() {
                 try {
                     getArtistInfoFromExternal()
                     if(abstractNYTimes != null){
-                        dataBase!!.saveArtist(artistName, abstractNYTimes)
+                        dataBase!!.saveArtist(artistName, abstractNYTimes,urlNYTimes)
                     }
                     createButtonWithLink(urlNYTimes)
                 } catch(e : Exception){
