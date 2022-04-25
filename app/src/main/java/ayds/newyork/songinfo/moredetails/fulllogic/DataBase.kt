@@ -24,7 +24,7 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
     fun saveArtist(artist: String?, info: String?){
         val db = this.writableDatabase
         val values = createMapValues(artist, info)
-        val newRowId = db.insert("$tableArtists", null, values)
+        db.insert("$tableArtists", null, values)
     }
 
     private fun createMapValues(artist : String?, info : String?): ContentValues{
@@ -37,9 +37,7 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
 
     fun getInfo(artist: String): String? {
         val cursor = createCursor(artist)
-        val items: MutableList<String> = getListInfo(cursor)
-        closeCursor(cursor)
-        return returnFirst(items)
+        return getArtistFromCursor(cursor)
     }
 
     private fun createCursor(artist: String) : Cursor{
@@ -65,26 +63,16 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
 
     private fun getInfoSort() : String = "$artistColumn DESC"
 
-    private fun getListInfo(cursor : Cursor) : MutableList<String>{
-        val items: MutableList<String> = ArrayList()
-        while (cursor.moveToNext()) {
-            val info = cursor.getString(
+    private fun getArtistFromCursor(cursor : Cursor) : String?{
+        var info : String? = null
+        if(cursor.moveToNext()){
+            info = cursor.getString(
                 cursor.getColumnIndexOrThrow(infoColumn)
             )
-            items.add(info)
         }
-        return items
+        closeCursor(cursor)
+        return info
     }
 
     private fun closeCursor(cursor : Cursor){ cursor.close() }
-
-    private fun returnFirst(list : MutableList<String>) : String? {
-        val toReturn : String? =
-        if(list.isEmpty()){
-            null
-        }else{
-            list[0]
-        }
-        return  toReturn
-    }
 }
