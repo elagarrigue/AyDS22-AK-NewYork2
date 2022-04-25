@@ -48,16 +48,16 @@ class OtherInfoWindow : AppCompatActivity() {
                 abstractNYTimes = "[*]$abstractNYTimes"
             } else {
                 var articleUrl : String?
-                try {
+                //try {
                     val artistInfoJsonObject = getArtistInfoFromExternal()
                     abstractNYTimes = getTextFromExternal(artistInfoJsonObject)
                     articleUrl = getURLFromArtistInfo(artistInfoJsonObject)
                     DataBase.saveArtist(dataBase, artistName, abstractNYTimes)
                     createButtonWithLink(articleUrl)
-                } catch (error : Exception){
-                    abstractNYTimes = "No se encontró"
+                /*} catch (error : Exception){
+                    abstractNYTimes = "No results"
                     articleUrl = "http://www.google.com"
-                }
+                }*/
             }
             applyImageAndText()
         }.start()
@@ -113,17 +113,21 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun getArtistInfoFromExternal(): JsonObject? {
-        val rawArtistInfoFromService: Response<String>
+        val rawArtistInfoCollectionFromService: Response<String>
 
         var result: JsonObject? = null
         try{
-            rawArtistInfoFromService = getRawArtistInfoFromExternal()
-            println(rawArtistInfoFromService.toString())
-            result = convertResponseToJsonObject(rawArtistInfoFromService)
-        } catch (e: IOException){
+            rawArtistInfoCollectionFromService = getRawArtistInfoFromExternal()
+            var artistInfoCollection = convertResponseToJsonObject(rawArtistInfoCollectionFromService)
+            result = getFirstResultFromArtistInfoIfExists(artistInfoCollection)
+        } catch (e: Exception){
             e.printStackTrace()
         }
         return result
+    }
+
+    private fun getFirstResultFromArtistInfoIfExists(artistInfoCollection: JsonObject?): JsonObject? {
+        return artistInfoCollection!!["response"].asJsonObject["docs"].asJsonArray[0].asJsonObject
     }
 
     private fun initializeDatabase() {
