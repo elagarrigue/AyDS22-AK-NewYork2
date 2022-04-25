@@ -27,6 +27,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private var dataBase: DataBase? = null
     private var artistName: String? = null
     private var abstractNYTimes: String? = null
+    private var urlNYTimes: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,35 +48,15 @@ class OtherInfoWindow : AppCompatActivity() {
             if (abstractNYTimes != null) {
                 abstractNYTimes = "[*]$abstractNYTimes"
             } else {
-                var articleUrl : String?
-                //try {
-                    val artistInfoJsonObject = getArtistInfoFromExternal()
-                    abstractNYTimes = getTextFromExternal(artistInfoJsonObject)
-                    articleUrl = getURLFromArtistInfo(artistInfoJsonObject)
-                    DataBase.saveArtist(dataBase, artistName, abstractNYTimes)
-                    createButtonWithLink(articleUrl)
-                /*} catch (error : Exception){
-                    abstractNYTimes = "No results"
-                    articleUrl = "http://www.google.com"
-                }*/
+                try {
+                    getArtistInfoFromExternal()
+                    createButtonWithLink(urlNYTimes)
+                } catch(e : Exception){
+                    abstractNYTimes = "No hay conexión con el servicio externo."
+                }
             }
             applyImageAndText()
         }.start()
-    }
-
-    private fun getTextFromExternal(artistInfo: JsonObject?): String {
-        val result : String
-        val abstract = getAbstractFromArtistInfo(artistInfo)
-        result = abstract?.replace("\\n", "\n") ?: "No Results"
-        return result
-    }
-
-    private fun getAbstractFromArtistInfo(artistInfo : JsonObject?) : String? {
-        return artistInfo!!["response"].asJsonObject["docs"].asJsonArray[0].asJsonObject["abstract"].asString
-    }
-
-    private fun getURLFromArtistInfo(artistInfo: JsonObject?) : String? {
-        return artistInfo!!["response"].asJsonObject["docs"].asJsonArray[0].asJsonObject["web_url"].asString
     }
 
     private fun createButtonWithLink(urlString: String?) {
@@ -106,28 +87,35 @@ class OtherInfoWindow : AppCompatActivity() {
         return nyTimesAPI.getArtistInfo(artistName).execute()
     }
 
-    private fun convertResponseToJsonObject(resp : Response<String>) : JsonObject?{
-        return Gson().fromJson(resp.body(), JsonObject::class.java)
-        //return javaObject["response"].asJsonObject
-        //return Gson().fromJson(resp.body(), JsonObject::class.java)["response"].asJsonObject
+    private fun String?.getFirstItem() : JsonObject {
+        val jsonObject = Gson().fromJson(this, JsonObject::class.java)
+        val resp = jsonObject["response"].asJsonObject //TODO: pasar a constantes
+        val articles = resp["docs"].asJsonArray
+        return articles[0].asJsonObject
     }
 
-    private fun getArtistInfoFromExternal(): JsonObject? {
-        val rawArtistInfoCollectionFromService: Response<String>
+    private fun getArtistInfoFromExternal(){
+        val callResponse = getRawArtistInfoFromExternal()
+        parseArtistInfo(callResponse.body())
+    }
 
-        var result: JsonObject? = null
+    private fun parseArtistInfo(serviceData : String?){
         try{
-            rawArtistInfoCollectionFromService = getRawArtistInfoFromExternal()
-            var artistInfoCollection = convertResponseToJsonObject(rawArtistInfoCollectionFromService)
-            result = getFirstResultFromArtistInfoIfExists(artistInfoCollection)
-        } catch (e: Exception){
-            e.printStackTrace()
+            serviceData?.getFirstItem()?.let { item ->
+                abstractNYTimes = item.getAbstract()
+                urlNYTimes = item.getUrl()
+            }
+        } catch(e : Exception){
+            abstractNYTimes = "No se encontró"
         }
-        return result
     }
 
-    private fun getFirstResultFromArtistInfoIfExists(artistInfoCollection: JsonObject?): JsonObject? {
-        return artistInfoCollection!!["response"].asJsonObject["docs"].asJsonArray[0].asJsonObject
+    private fun JsonObject.getAbstract(): String? {
+        return this["abstract"].asString
+    }
+
+    private fun JsonObject.getUrl(): String? {
+        return this["web_url"].asString
     }
 
     private fun initializeDatabase() {
