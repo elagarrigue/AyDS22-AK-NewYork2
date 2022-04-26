@@ -39,6 +39,7 @@ class OtherInfoWindow : AppCompatActivity() {
         initializeDatabase()
         obtainArtistName()
         getArtistInfo()
+        applyImageAndText()
     }
 
     private fun obtainArtistName(){
@@ -61,7 +62,6 @@ class OtherInfoWindow : AppCompatActivity() {
                     abstractNYTimes = "No hay conexión con el servicio externo."
                 }
             }
-            applyImageAndText()
         }.start()
     }
 
