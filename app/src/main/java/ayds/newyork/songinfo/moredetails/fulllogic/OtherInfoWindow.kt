@@ -25,6 +25,7 @@ private const val RESPONSE = "response"
 private const val DOCS = "docs"
 private const val ABSTRACT  = "abstract"
 private const val WEB_URL = "web_url"
+private const val ASTERISK = "[*]"
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textAbstract: TextView? = null
@@ -61,21 +62,25 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun getArtistInfo() {
         Thread {
-            abstractNYTimes = dataBase.getInfo(artistName)
-            if (abstractNYTimes != null) {
-                abstractNYTimes = "[*]$abstractNYTimes"
-            } else {
-                try {
-                    getArtistInfoFromExternal()
-                    if(abstractNYTimes != null){
-                        dataBase.saveArtist(artistName, abstractNYTimes,urlNYTimes)
-                    }
-                    createButtonWithLink(urlNYTimes)
-                } catch(e : Exception){
-                    abstractNYTimes = "No hay conexión con el servicio externo."
-                }
-            }
+            getArtist()
         }.start()
+    }
+
+    private fun getArtist() {
+        abstractNYTimes = dataBase.getInfo(artistName)
+        if (abstractNYTimes != null) {
+            abstractNYTimes = ASTERISK + "$abstractNYTimes"
+        } else {
+            try {
+                getArtistInfoFromExternal()
+                if (abstractNYTimes != null) {
+                    dataBase.saveArtist(artistName, abstractNYTimes, urlNYTimes)
+                }
+                createButtonWithLink(urlNYTimes)
+            } catch (e: Exception) {
+                abstractNYTimes = "No hay conexión con el servicio externo."
+            }
+        }
     }
 
     private fun createButtonWithLink(urlString: String?) {
@@ -92,7 +97,6 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun applyText() {
         runOnUiThread {
-            applyImage()
             if(abstractNYTimes == null) {
                 abstractNYTimes = "No se encontró"
             }
