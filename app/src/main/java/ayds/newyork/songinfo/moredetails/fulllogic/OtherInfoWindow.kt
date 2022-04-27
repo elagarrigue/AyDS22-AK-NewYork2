@@ -27,8 +27,9 @@ private const val WEB_URL = "web_url"
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
-    private var dataBase: DataBase? = null
-    private var artistName: String? = null
+    private lateinit var dataBase: DataBase
+    private lateinit var nyTimesAPI : NYTimesAPI
+    private lateinit var artistName: String
     private var abstractNYTimes: String? = null
     private var urlNYTimes: String? = null
 
@@ -36,6 +37,8 @@ class OtherInfoWindow : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         textPane2 = findViewById(R.id.textPane2)
+
+        initializeAPI()
         initializeDatabase()
         obtainArtistName()
         getArtistInfo()
@@ -43,19 +46,19 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun obtainArtistName(){
-        artistName = intent.getStringExtra("artistName")
+        artistName = intent.getStringExtra("artistName").toString()
     }
 
     private fun getArtistInfo() {
         Thread {
-            abstractNYTimes = dataBase!!.getInfo(artistName!!)
+            abstractNYTimes = dataBase.getInfo(artistName)
             if (abstractNYTimes != null) {
                 abstractNYTimes = "[*]$abstractNYTimes"
             } else {
                 try {
                     getArtistInfoFromExternal()
                     if(abstractNYTimes != null){
-                        dataBase!!.saveArtist(artistName, abstractNYTimes,urlNYTimes)
+                        dataBase.saveArtist(artistName, abstractNYTimes,urlNYTimes)
                     }
                     createButtonWithLink(urlNYTimes)
                 } catch(e : Exception){
@@ -86,16 +89,15 @@ class OtherInfoWindow : AppCompatActivity() {
         }
     }
 
-    private fun initializeAPI(): NYTimesAPI {
+    private fun initializeAPI() {
         val retrofit = Retrofit.Builder()
             .baseUrl(NY_TIMES_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .build()
-        return retrofit.create(NYTimesAPI::class.java)
+        nyTimesAPI = retrofit.create(NYTimesAPI::class.java)
     }
 
     private fun getRawArtistInfoFromExternal() : Response<String>{
-        val nyTimesAPI = initializeAPI()
         return nyTimesAPI.getArtistInfo(artistName).execute()
     }
 
