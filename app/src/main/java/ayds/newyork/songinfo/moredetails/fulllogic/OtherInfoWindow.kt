@@ -25,6 +25,7 @@ private const val RESPONSE = "response"
 private const val DOCS = "docs"
 private const val ABSTRACT  = "abstract"
 private const val WEB_URL = "web_url"
+private const val ARTIST_NAME_EXTRA = "artistName"
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
@@ -51,7 +52,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun obtainArtistName(){
-        artistName = intent.getStringExtra("artistName").toString()
+        artistName = intent.getStringExtra(ARTIST_NAME_EXTRA).toString()
     }
 
     private fun getArtistInfo() {
