@@ -6,7 +6,9 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", null, 1){
+private const val nameDataBase : String = "dictionary.db"
+
+class DataBase(context: Context?) : SQLiteOpenHelper(context, nameDataBase, null, 1){
 
     private val artistColumn : String = "artist"
     private val infoColumn : String = "info"
@@ -70,9 +72,7 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, "dictionary.db", n
                 cursor.getColumnIndexOrThrow(infoColumn)
             )
         }
-        closeCursor(cursor)
+        cursor.close()
         return info
     }
-
-    private fun closeCursor(cursor : Cursor){ cursor.close() }
 }
