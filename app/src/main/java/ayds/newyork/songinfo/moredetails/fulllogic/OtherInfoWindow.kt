@@ -27,7 +27,7 @@ private const val ABSTRACT  = "abstract"
 private const val WEB_URL = "web_url"
 
 class OtherInfoWindow : AppCompatActivity() {
-    private var textPane2: TextView? = null
+    private var textAbstract: TextView? = null
     private lateinit var btnUrl: Button
 
     private lateinit var dataBase: DataBase
@@ -40,14 +40,18 @@ class OtherInfoWindow : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
-        textPane2 = findViewById(R.id.textPane2)
-        btnUrl = findViewById(R.id.openUrlButton)
+        initProperties()
 
         initializeAPI()
         initializeDatabase()
         obtainArtistName()
         getArtistInfo()
         applyImageAndText()
+    }
+
+    private fun initProperties() {
+        textPane2 = findViewById(R.id.textPane2)
+        btnUrl = findViewById(R.id.openUrlButton)
     }
 
     private fun obtainArtistName(){
