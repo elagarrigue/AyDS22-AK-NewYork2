@@ -75,10 +75,14 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun createButtonWithLink(urlString: String?) {
         btnUrl.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(urlString)
-            startActivity(intent)
+            openLink(urlString)
         }
+    }
+
+    private fun openLink(urlString: String?){
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(urlString)
+        startActivity(intent)
     }
 
     private fun applyImageAndText() {
