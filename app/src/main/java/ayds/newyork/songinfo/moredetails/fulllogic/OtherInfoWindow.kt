@@ -46,11 +46,12 @@ class OtherInfoWindow : AppCompatActivity() {
         initializeDatabase()
         obtainArtistName()
         getArtistInfo()
-        applyImageAndText()
+        applyImage()
+        applyText()
     }
 
     private fun initProperties() {
-        textPane2 = findViewById(R.id.textPane2)
+        textAbstract = findViewById(R.id.textPane2)
         btnUrl = findViewById(R.id.openUrlButton)
     }
 
@@ -89,16 +90,22 @@ class OtherInfoWindow : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun applyImageAndText() {
+    private fun applyText() {
         runOnUiThread {
-            Picasso.get().load(NY_TIMES_IMG).into(findViewById<View>(R.id.imageView) as ImageView)
+            applyImage()
             if(abstractNYTimes == null) {
                 abstractNYTimes = "No se encontró"
             }
-            textPane2!!.text = HtmlCompat.fromHtml(
+            textAbstract!!.text = HtmlCompat.fromHtml(
                 textToHtml(abstractNYTimes!!, artistName),
                 HtmlCompat.FROM_HTML_MODE_LEGACY
             )
+        }
+    }
+
+    private fun applyImage() {
+        runOnUiThread {
+            Picasso.get().load(NY_TIMES_IMG).into(findViewById<View>(R.id.imageView) as ImageView)
         }
     }
 
