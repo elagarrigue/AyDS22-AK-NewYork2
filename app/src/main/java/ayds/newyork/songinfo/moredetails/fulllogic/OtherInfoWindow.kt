@@ -63,6 +63,7 @@ class OtherInfoWindow : AppCompatActivity() {
             getArtistInfoFromRepository()
             applyImage()
             applyText()
+            createButtonWithLink()
         }.start()
     }
 
@@ -76,16 +77,15 @@ class OtherInfoWindow : AppCompatActivity() {
                 if (abstractNYTimes != null) {
                     dataBase.saveArtist(artistName, abstractNYTimes, urlNYTimes)
                 }
-                createButtonWithLink(urlNYTimes)
             } catch (e: Exception) {
                 abstractNYTimes = "No hay conexión con el servicio externo."
             }
         }
     }
 
-    private fun createButtonWithLink(urlString: String?) {
+    private fun createButtonWithLink() {
         btnUrl.setOnClickListener {
-            openLink(urlString)
+            openLink(urlNYTimes)
         }
     }
 
