@@ -47,8 +47,6 @@ class OtherInfoWindow : AppCompatActivity() {
         initializeDatabase()
         obtainArtistName()
         getArtistInfo()
-        applyImage()
-        applyText()
     }
 
     private fun initProperties() {
@@ -62,11 +60,13 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun getArtistInfo() {
         Thread {
-            getArtist()
+            getArtistInfoFromRepository()
+            applyImage()
+            applyText()
         }.start()
     }
 
-    private fun getArtist() {
+    private fun getArtistInfoFromRepository() {
         abstractNYTimes = dataBase.getInfo(artistName)
         if (abstractNYTimes != null) {
             abstractNYTimes = ASTERISK + "$abstractNYTimes"
