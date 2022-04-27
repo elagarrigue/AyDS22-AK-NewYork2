@@ -12,6 +12,7 @@ import android.content.Intent
 import android.net.Uri
 import com.squareup.picasso.Picasso
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import androidx.core.text.HtmlCompat
 import retrofit2.Response
@@ -27,8 +28,11 @@ private const val WEB_URL = "web_url"
 
 class OtherInfoWindow : AppCompatActivity() {
     private var textPane2: TextView? = null
+    private lateinit var btnUrl: Button
+
     private lateinit var dataBase: DataBase
     private lateinit var nyTimesAPI : NYTimesAPI
+
     private lateinit var artistName: String
     private var abstractNYTimes: String? = null
     private var urlNYTimes: String? = null
@@ -37,6 +41,7 @@ class OtherInfoWindow : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_other_info)
         textPane2 = findViewById(R.id.textPane2)
+        btnUrl = findViewById(R.id.openUrlButton)
 
         initializeAPI()
         initializeDatabase()
@@ -69,7 +74,7 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun createButtonWithLink(urlString: String?) {
-        findViewById<View>(R.id.openUrlButton).setOnClickListener {
+        btnUrl.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data = Uri.parse(urlString)
             startActivity(intent)
