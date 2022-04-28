@@ -97,14 +97,18 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun applyText() {
         runOnUiThread {
-            if(abstractNYTimes == null) {
-                abstractNYTimes = "No se encontró"
-            }
-            textAbstract.text = HtmlCompat.fromHtml(
-                textToHtml(abstractNYTimes!!, artistName),
-                HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
+            abstractNYTimesResolve()
         }
+    }
+
+    private fun abstractNYTimesResolve() {
+        if (abstractNYTimes == null) {
+            abstractNYTimes = "No se encontró"
+        }
+        textAbstract.text = HtmlCompat.fromHtml(
+            textToHtml(abstractNYTimes!!, artistName),
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
     }
 
     private fun applyImage() {
