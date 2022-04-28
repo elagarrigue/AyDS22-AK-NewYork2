@@ -17,8 +17,7 @@ class DataBase(context: Context?) : SQLiteOpenHelper(context, nameDataBase, null
     private val tableArtists : String = "artists"
 
     override fun onCreate(dataBase: SQLiteDatabase){
-        val createQuery =  "create table $tableArtists ($idColumn INTEGER PRIMARY KEY AUTOINCREMENT, $artistColumn string, $infoColumn string, $sourceColumn integer)"
-        dataBase.execSQL(createQuery)
+        dataBase.execSQL("create table $tableArtists ($idColumn INTEGER PRIMARY KEY AUTOINCREMENT, $artistColumn string, $infoColumn string, $sourceColumn integer)")
     }
 
     override fun onUpgrade(dataBase: SQLiteDatabase, oldVersion: Int, newVersion: Int){}
