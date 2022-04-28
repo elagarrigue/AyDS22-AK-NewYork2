@@ -28,7 +28,7 @@ private const val WEB_URL = "web_url"
 private const val ASTERISK = "[*]"
 
 class OtherInfoWindow : AppCompatActivity() {
-    private var textAbstract: TextView? = null
+    private lateinit var textAbstract: TextView
     private lateinit var btnUrl: Button
 
     private lateinit var dataBase: DataBase
@@ -100,7 +100,7 @@ class OtherInfoWindow : AppCompatActivity() {
             if(abstractNYTimes == null) {
                 abstractNYTimes = "No se encontró"
             }
-            textAbstract!!.text = HtmlCompat.fromHtml(
+            textAbstract.text = HtmlCompat.fromHtml(
                 textToHtml(abstractNYTimes!!, artistName),
                 HtmlCompat.FROM_HTML_MODE_LEGACY
             )
