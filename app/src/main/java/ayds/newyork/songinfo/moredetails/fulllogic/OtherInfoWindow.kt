@@ -107,10 +107,9 @@ class OtherInfoWindow : AppCompatActivity() {
         return formatHtml(renderAbstractAsHtml(getAbstractText(), artistName))
     }
 
-    private fun getAbstractText() : String =
-        abstractNYTimes ?: {
-            "No hay resultados"
-        }.toString()
+    private fun getAbstractText() : String {
+        return abstractNYTimes ?: "No se encontró"
+    }
 
     private fun formatHtml(abstractHtml : String) : Spanned {
         return HtmlCompat.fromHtml(
