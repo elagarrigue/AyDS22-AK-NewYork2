@@ -80,7 +80,7 @@ class OtherInfoWindow : AppCompatActivity() {
                     dataBase.saveArtist(artistName, abstractNYTimes, urlNYTimes)
                 }
             } catch (e: Exception) {
-                abstractNYTimes = "No hay conexión con el servicio externo."
+                abstractNYTimes = null
             }
         }
     }
