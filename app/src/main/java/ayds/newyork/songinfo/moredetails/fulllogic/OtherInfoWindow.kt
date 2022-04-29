@@ -11,7 +11,6 @@ import com.google.gson.JsonObject
 import android.content.Intent
 import android.net.Uri
 import com.squareup.picasso.Picasso
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.core.text.HtmlCompat
@@ -30,7 +29,7 @@ private const val ASTERISK = "[*]"
 class OtherInfoWindow : AppCompatActivity() {
     private lateinit var textAbstract: TextView
     private lateinit var btnUrl: Button
-    private lateinit var NYTimesImg: ImageView
+    private lateinit var nyTimesImg: ImageView
 
     private lateinit var dataBase: DataBase
     private lateinit var nyTimesAPI : NYTimesAPI
@@ -53,7 +52,7 @@ class OtherInfoWindow : AppCompatActivity() {
     private fun initProperties() {
         textAbstract = findViewById(R.id.textPane2)
         btnUrl = findViewById(R.id.openUrlButton)
-        NYTimesImg = findViewById(R.id.imageView)
+        nyTimesImg = findViewById(R.id.imageView)
     }
 
     private fun obtainArtistName(){
@@ -115,7 +114,7 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun applyImage() {
         runOnUiThread {
-            Picasso.get().load(NY_TIMES_IMG).into(NYTimesImg)
+            Picasso.get().load(NY_TIMES_IMG).into(nyTimesImg)
         }
     }
 
