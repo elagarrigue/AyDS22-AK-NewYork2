@@ -86,8 +86,22 @@ class OtherInfoWindow : AppCompatActivity() {
     }
 
     private fun createButtonWithLink() {
+        urlNYTimes?.let{
+            setListenerForLinkBtn()
+        } ?: run {
+            disableLinkBtn()
+        }
+    }
+
+    private fun setListenerForLinkBtn(){
         btnUrl.setOnClickListener {
             openLink(urlNYTimes)
+        }
+    }
+
+    private fun disableLinkBtn(){
+        runOnUiThread {
+            btnUrl.isEnabled = false
         }
     }
 
