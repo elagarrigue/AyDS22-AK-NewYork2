@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonObject
 import android.content.Intent
 import android.net.Uri
+import android.text.Spanned
 import com.squareup.picasso.Picasso
 import android.widget.Button
 import android.widget.ImageView
@@ -98,16 +99,22 @@ class OtherInfoWindow : AppCompatActivity() {
 
     private fun applyText() {
         runOnUiThread {
-            abstractNYTimesResolve()
+            textAbstract.text = getAbstractAsHtml()
         }
     }
 
-    private fun abstractNYTimesResolve() {
-        if (abstractNYTimes == null) {
-            abstractNYTimes = "No se encontró"
-        }
-        textAbstract.text = HtmlCompat.fromHtml(
-            textToHtml(abstractNYTimes!!, artistName),
+    private fun getAbstractAsHtml() : Spanned{
+        return formatHtml(renderAbstractAsHtml(getAbstractText(), artistName))
+    }
+
+    private fun getAbstractText() : String =
+        abstractNYTimes ?: {
+            "No hay resultados"
+        }.toString()
+
+    private fun formatHtml(abstractHtml : String) : Spanned {
+        return HtmlCompat.fromHtml(
+            abstractHtml,
             HtmlCompat.FROM_HTML_MODE_LEGACY
         )
     }
@@ -165,14 +172,14 @@ class OtherInfoWindow : AppCompatActivity() {
         dataBase = DataBase(this)
     }
 
-    private fun textToHtml(text: String, term: String?): String {
+    private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append("<html><div width=400>")
         stringBuilder.append("<font face=\"arial\">")
-        val textWithBold = text
+        val textWithBold = abstract
             .replace("'", " ")
             .replace("\n", "<br>")
-            .replace("(?i)" + term!!.toRegex(), "<b>" + term.uppercase(Locale.getDefault()) + "</b>")
+            .replace("(?i)$artistName".toRegex(), "<b>" + artistName.uppercase(Locale.getDefault()) + "</b>")
         stringBuilder.append(textWithBold)
         stringBuilder.append("</font></div></html>")
         return stringBuilder.toString()
