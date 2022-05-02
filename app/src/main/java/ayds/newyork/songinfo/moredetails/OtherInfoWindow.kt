@@ -1,4 +1,4 @@
-package ayds.newyork.songinfo.moredetails.fulllogic
+package ayds.newyork.songinfo.moredetails
 
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
