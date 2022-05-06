@@ -13,6 +13,8 @@ private const val nameDataBase : String = "dictionary.db"
 internal class NYTimesLocalStorageImpl(context: Context?) : SQLiteOpenHelper(context, nameDataBase, null, 1),
     NYTimesLocalStorage {
 
+    private val mapper : CursorToArtistInfoMapper = CursorToArtistInfoMapperImpl()
+
     override fun onCreate(dataBase: SQLiteDatabase){
         dataBase.execSQL(createArtistInfoTableQuery)
     }
@@ -60,26 +62,14 @@ internal class NYTimesLocalStorageImpl(context: Context?) : SQLiteOpenHelper(con
 
     private fun getInfoSort() : String = "$ARTIST_COLUMN DESC"
 
-    private fun getArtistFromCursor(cursor : Cursor) : ArtistInfo?{
-        val artistInfo : ArtistInfo? = null
-        if(cursor.moveToNext()){
-            ArtistInfo(
-                artistName = cursor.getString(cursor.getColumnIndexOrThrow(ARTIST_COLUMN)),
-                artistInfo = cursor.getString(cursor.getColumnIndexOrThrow(INFO_COLUMN))
-            )
-        }
-        cursor.close()
-        return artistInfo
-    }
-
     override fun getArtistByName(name: String): ArtistInfo? {
         val cursor = createArtistNameCursor(name)
-        return getArtistFromCursor(cursor)
+        return mapper.map(cursor)
     }
 
     override fun getArtistById(id: String): ArtistInfo? {
         val cursor = createIdCursor(id)
-        return getArtistFromCursor(cursor)
+        return mapper.map(cursor)
     }
 
     override fun saveArtist(artist: ArtistInfo) {
