@@ -1,6 +1,7 @@
 package ayds.newyork.songinfo.moredetails.model.repository
 
 import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.NYTimesLocalStorage
 
 interface ArtistInfoRepository {
 
@@ -9,7 +10,11 @@ interface ArtistInfoRepository {
     fun getArtistByName(name : String) : ArtistInfo
 }
 
-internal class ArtistInfoRepositoryImpl : ArtistInfoRepository {
+private const val ASTERISK = "[*]"
+
+internal class ArtistInfoRepositoryImpl (
+    private val nyTimesLocalStorage: NYTimesLocalStorage
+) : ArtistInfoRepository {
 
     override fun getArtistById(id: String): ArtistInfo {
         TODO("Not yet implemented")

@@ -19,7 +19,7 @@ object MoreDetailsModelInjector {
     fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
         val nyTimesLocalStorage : NYTimesLocalStorage = NYTimesLocalStorageImpl(moreDetailsView as Context)
         val nytService : NYTimesService = NYTimesInjector.nyTimesService
-        val repository : ArtistInfoRepository = ArtistInfoRepositoryImpl()
+        val repository : ArtistInfoRepository = ArtistInfoRepositoryImpl(nyTimesLocalStorage)
         moreDetailsModel = MoreDetailsModelImpl(repository)
     }
 
