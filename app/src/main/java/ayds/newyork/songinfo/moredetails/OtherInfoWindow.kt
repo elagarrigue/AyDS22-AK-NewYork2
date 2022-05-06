@@ -29,6 +29,7 @@ private const val WEB_URL = "web_url"
 private const val ASTERISK = "[*]"
 
 class OtherInfoWindow : AppCompatActivity() {
+
     private lateinit var textAbstract: TextView
     private lateinit var btnUrl: Button
     private lateinit var nyTimesImg: ImageView
