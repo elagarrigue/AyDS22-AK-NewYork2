@@ -14,9 +14,9 @@ object MoreDetailsModelInjector {
 
     private lateinit var moreDetailsModel: MoreDetailsModel
 
-    fun getHomeModel(): MoreDetailsModel = moreDetailsModel
+    fun getMoreDetailsModel(): MoreDetailsModel = moreDetailsModel
 
-    fun initHomeModel(moreDetailsView: MoreDetailsView) {
+    fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
         val nyTimesLocalStorage : NYTimesLocalStorage = NYTimesLocalStorageImpl(moreDetailsView as Context)
         val nytService : NYTimesService = NYTimesInjector.nyTimesService
         val repository : ArtistInfoRepository = ArtistInfoRepositoryImpl()
