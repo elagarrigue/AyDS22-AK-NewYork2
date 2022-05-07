@@ -20,8 +20,8 @@ internal class ArtistInfoRepositoryImpl (
     private val nytService : NYTimesService
 ) : ArtistInfoRepository {
 
-    override fun getArtistById(id: String): ArtistInfo {
-        TODO("Not yet implemented")
+    override fun getArtistById(id: String): Artist {
+        return nyTimesLocalStorage.getArtistById(id)?:EmptyArtist
     }
 
     override fun getArtistByName(name: String): Artist {
