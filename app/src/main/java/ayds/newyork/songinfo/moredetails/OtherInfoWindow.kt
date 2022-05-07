@@ -30,7 +30,7 @@ private const val ASTERISK = "[*]"
 
 class OtherInfoWindow : AppCompatActivity() {
 
-    private lateinit var textAbstract: TextView
+   /* private lateinit var textAbstract: TextView
     private lateinit var btnUrl: Button
     private lateinit var nyTimesImg: ImageView
 
@@ -187,7 +187,7 @@ class OtherInfoWindow : AppCompatActivity() {
         dataBase = DataBase(this)
     }
 
-    private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
+    private fun renderAbstractAsHtml(: String, artistName: String): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append("<html><div width=400>")
         stringBuilder.append("<font face=\"arial\">")
@@ -202,5 +202,5 @@ class OtherInfoWindow : AppCompatActivity() {
 
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
-    }
+    }*/
 }

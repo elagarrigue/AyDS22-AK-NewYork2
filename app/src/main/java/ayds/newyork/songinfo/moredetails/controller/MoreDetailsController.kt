@@ -29,7 +29,9 @@ internal class MoreDetailsControllerImpl(
         }
 
     private fun getArtistInfo() {
-        TODO("No implementada todavía")
+        Thread{
+            moreDetailsModel.searchArtist("duki")
+        }.start()
     }
 
 }

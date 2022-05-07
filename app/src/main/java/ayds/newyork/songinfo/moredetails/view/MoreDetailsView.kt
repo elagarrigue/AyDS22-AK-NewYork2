@@ -8,7 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
+import ayds.newyork.songinfo.home.model.HomeModelInjector
+import ayds.newyork.songinfo.home.view.HomeViewInjector
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
+import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 import ayds.newyork.songinfo.moredetails.model.entities.Artist
 import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
 import ayds.observer.Observable
@@ -37,8 +40,15 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_more_details_view)
+        initModule()
         initProperties()
         initObservers()
+        notifyGetArtistInfoAction()
+    }
+
+    private fun initModule() {
+        MoreDetailsViewInjector.init(this)
+        moreDetailsModel = MoreDetailsModelInjector.getMoreDetailsModel()
     }
 
     private fun initProperties() {
@@ -58,7 +68,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistInfo(artistInfoFromRepository : Artist) {
         applyImage()
-        applyText(artistInfoFromRepository.artistInfo)
+        applyText(artistInfoFromRepository)
     }
 
     private fun applyImage() {
@@ -84,13 +94,13 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             artistArticle
     }
 
-    private fun createButtonWithLink() {
+    /*private fun createButtonWithLink() {
         urlNYTimes?.let{
             setListenerForLinkBtn()
         } ?: run {
             disableLinkBtn()
         }
-    }
+    }*/
 
     private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
         val stringBuilder = StringBuilder()
