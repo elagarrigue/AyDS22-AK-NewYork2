@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloWorld">
         <activity
-            android:name=".moredetails.view.MoreDetailsView"
+            android:name=".moredetails.view.MoreDetailsViewActivity"
             android:exported="false" />
         <activity
             android:name=".home.view.HomeViewActivity"
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".moredetails.fulllogic.OtherInfoWindow"
+            android:name=".moredetails.OtherInfoWindow"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
     </application>
 
