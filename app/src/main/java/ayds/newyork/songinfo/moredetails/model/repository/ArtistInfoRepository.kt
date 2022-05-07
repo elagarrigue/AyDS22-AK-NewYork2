@@ -13,8 +13,6 @@ interface ArtistInfoRepository {
     fun getArtistByName(name : String) : Artist
 }
 
-private const val ASTERISK = "[*]"
-
 internal class ArtistInfoRepositoryImpl (
     private val nyTimesLocalStorage: NYTimesLocalStorage,
     private val nytService : NYTimesService
