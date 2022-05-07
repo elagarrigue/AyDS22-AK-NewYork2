@@ -2,17 +2,20 @@ package ayds.newyork.songinfo.moredetails.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Spanned
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
-import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelImpl
+import ayds.newyork.songinfo.moredetails.model.entities.Artist
 import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.model.repository.ArtistInfoRepository
-import ayds.newyork.songinfo.moredetails.model.repository.ArtistInfoRepositoryImpl
 import ayds.observer.Observable
 import ayds.observer.Subject
+import com.squareup.picasso.Picasso
+import java.lang.StringBuilder
+import java.util.*
 
 interface MoreDetailsView {
     val moreDetailsEventObservable: Observable<MoreDetailsEvent>
@@ -20,7 +23,7 @@ interface MoreDetailsView {
 
 private const val ASTERISK = "[*]"
 private const val NY_TIMES_IMG = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
-
+private const val NY_NOT_FOUND = "No se encontro"
 
 class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
@@ -30,14 +33,12 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private lateinit var textAbstract: TextView
     private lateinit var btnUrl: Button
     private lateinit var nyTimesImg: ImageView
-    private lateinit var artist : ArtistInfo
-    private var repository : ArtistInfoRepository = ArtistInfoRepositoryImpl()
-    private var model : MoreDetailsModel = MoreDetailsModelImpl(repository)
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_more_details_view)
         initProperties()
+        initObservers()
     }
 
     private fun initProperties() {
@@ -48,6 +49,67 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun notifyGetArtistInfoAction() {
         onActionSubject.notify(MoreDetailsEvent.GetArtistInfo)
+    }
+
+    private fun initObservers(){
+        moreDetailsModel.artistObservable
+            .subscribe{ value -> updateArtistInfo(value) }
+    }
+
+    private fun updateArtistInfo(artistInfoFromRepository : Artist) {
+        applyImage()
+        applyText(artistInfoFromRepository.artistInfo)
+    }
+
+    private fun applyImage() {
+        runOnUiThread {
+            Picasso.get().load(NY_TIMES_IMG).into(nyTimesImg)
+        }
+    }
+
+    private fun applyText(artistInfo: Artist) {
+        runOnUiThread {
+            textAbstract.text = getAbstractAsHtml(artistInfo)
+        }
+    }
+
+    private fun getAbstractAsHtml(artistInfo : Artist) : Spanned {
+        return formatHtml(renderAbstractAsHtml(getAbstractText(artistInfo.artistInfo), artistInfo.artistName))
+    }
+
+    private fun getAbstractText(artistArticle: String): String {
+        return if (artistArticle == "")
+            NY_NOT_FOUND
+        else
+            artistArticle
+    }
+
+    private fun createButtonWithLink() {
+        urlNYTimes?.let{
+            setListenerForLinkBtn()
+        } ?: run {
+            disableLinkBtn()
+        }
+    }
+
+    private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
+        val stringBuilder = StringBuilder()
+        stringBuilder.append("<html><div width=400>")
+        stringBuilder.append("<font face=\"arial\">")
+        val textWithBold = abstract
+            .replace("'", " ")
+            .replace("\n", "<br>")
+            .replace("(?i)$artistName".toRegex(), "<b>" + artistName.uppercase(Locale.getDefault()) + "</b>")
+        stringBuilder.append(textWithBold)
+        stringBuilder.append("</font></div></html>")
+        return stringBuilder.toString()
+    }
+
+    private fun formatHtml(abstractHtml : String) : Spanned {
+        return HtmlCompat.fromHtml(
+            abstractHtml,
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
     }
 
     companion object {
