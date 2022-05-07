@@ -8,12 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
-import ayds.newyork.songinfo.home.model.HomeModelInjector
-import ayds.newyork.songinfo.home.view.HomeViewInjector
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 import ayds.newyork.songinfo.moredetails.model.entities.Artist
 import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyArtist
 import ayds.observer.Observable
 import ayds.observer.Subject
 import com.squareup.picasso.Picasso
@@ -22,6 +21,7 @@ import java.util.*
 
 interface MoreDetailsView {
     val moreDetailsEventObservable: Observable<MoreDetailsEvent>
+    var uiState : MoreDetailsUiState
 }
 
 private const val ASTERISK = "[*]"
@@ -36,6 +36,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private lateinit var textAbstract: TextView
     private lateinit var btnUrl: Button
     private lateinit var nyTimesImg: ImageView
+    override var uiState = MoreDetailsUiState()
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +50,29 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun initModule() {
         MoreDetailsViewInjector.init(this)
         moreDetailsModel = MoreDetailsModelInjector.getMoreDetailsModel()
+    }
+
+    private fun updateUiState(artist: Artist) {
+        when (artist) {
+            is ArtistInfo -> updateMoreDetailsUiState(artist)
+            EmptyArtist -> updateNoResultsUiState()
+        }
+    }
+
+    private fun updateMoreDetailsUiState(artist : Artist){
+        uiState = uiState.copy(
+            name = artist.artistName,
+            article = artist.artistInfo,
+            url = ""
+        )
+    }
+
+    private fun updateNoResultsUiState(){
+        uiState = uiState.copy(
+            name = "",
+            article = "",
+            url = ""
+        )
     }
 
     private fun initProperties() {

@@ -1,6 +1,5 @@
 package ayds.newyork.songinfo.moredetails.controller
 
-import ayds.newyork.songinfo.home.view.HomeUiEvent
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsEvent
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsView
@@ -30,7 +29,7 @@ internal class MoreDetailsControllerImpl(
 
     private fun getArtistInfo() {
         Thread{
-            moreDetailsModel.searchArtist("duki")
+            moreDetailsModel.searchArtist(moreDetailsView.uiState.name)
         }.start()
     }
 
