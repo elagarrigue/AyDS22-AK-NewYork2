@@ -15,9 +15,7 @@ internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
     override fun getArtistInfoText(artist: Artist): String {
         return when (artist) {
             is ArtistInfo ->
-                "${
-                    if (artist.isLocallyStored) ASTERISK else "" +" ${artist.artistInfo} " 
-                }\n"
+                (if (artist.isLocallyStored) ASTERISK else "") + " ${artist.artistInfo} "
 
             else -> NY_NOT_FOUND
         }

@@ -11,9 +11,9 @@ interface CursorToArtistInfoMapper {
 internal class CursorToArtistInfoMapperImpl : CursorToArtistInfoMapper {
 
     override fun map(cursor : Cursor) : ArtistInfo? {
-        val artistInfo : ArtistInfo? = null
+        var artistInfo : ArtistInfo? = null
         if(cursor.moveToNext()){
-            ArtistInfo(
+            artistInfo = ArtistInfo(
                 artistName = cursor.getString(cursor.getColumnIndexOrThrow(ARTIST_COLUMN)),
                 artistInfo = cursor.getString(cursor.getColumnIndexOrThrow(INFO_COLUMN)),
                 artistUrl = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_COLUMN))
