@@ -26,7 +26,6 @@ interface MoreDetailsView {
     var uiState : MoreDetailsUiState
 }
 
-
 private const val NY_TIMES_IMG = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
 
 class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
