@@ -63,7 +63,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         uiState = uiState.copy(
             name = artist.artistName,
             article = artist.artistInfo,
-            url = ""
+            url = artist.artistUrl
         )
     }
 

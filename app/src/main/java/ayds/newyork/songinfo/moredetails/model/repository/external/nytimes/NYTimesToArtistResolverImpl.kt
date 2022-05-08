@@ -18,8 +18,9 @@ class NYTimesToArtistResolverImpl : NYTimesToArtistResolver {
         return try{
             serviceData?.getFirstItem()?.let { item ->
                 ArtistInfo(
-                    item.getName(),
-                    item.getInfo(artistName)
+                    artistName,
+                    item.getInfo(),
+                    item.getUrl(artistName)
                 )
             }
         } catch(e : Exception){
@@ -27,11 +28,11 @@ class NYTimesToArtistResolverImpl : NYTimesToArtistResolver {
         }
     }
 
-    private fun JsonObject.getName(): String {
+    private fun JsonObject.getInfo(): String {
         return this[ABSTRACT].asString
     }
 
-    private fun JsonObject.getInfo(artistName: String): String {
+    private fun JsonObject.getUrl(artistName: String): String {
         return renderAbstractAsHtml(this[WEB_URL].asString,artistName)
     }
 

@@ -15,7 +15,8 @@ internal class CursorToArtistInfoMapperImpl : CursorToArtistInfoMapper {
         if(cursor.moveToNext()){
             ArtistInfo(
                 artistName = cursor.getString(cursor.getColumnIndexOrThrow(ARTIST_COLUMN)),
-                artistInfo = cursor.getString(cursor.getColumnIndexOrThrow(INFO_COLUMN))
+                artistInfo = cursor.getString(cursor.getColumnIndexOrThrow(INFO_COLUMN)),
+                artistUrl = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_COLUMN))
             )
         }
         cursor.close()

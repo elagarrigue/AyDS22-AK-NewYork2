@@ -11,4 +11,4 @@ const val createArtistInfoTableQuery: String =
             "$ID_COLUMN INTEGER PRIMARY KEY AUTOINCREMENT, "+
             "$ARTIST_COLUMN string, " +
             "$INFO_COLUMN string, "+
-            "$SOURCE_COLUMN integer)"
+            "$SOURCE_COLUMN string)"
