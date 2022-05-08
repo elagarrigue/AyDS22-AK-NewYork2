@@ -149,12 +149,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         startActivity(intent)
     }
 
-    /*private fun disableLinkBtn(){
-        runOnUiThread {
-            btnUrl.isEnabled = false
-        }
-    }*/
-
     private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append("<html><div width=400>")
