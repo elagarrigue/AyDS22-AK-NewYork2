@@ -26,12 +26,12 @@ interface MoreDetailsView {
     var uiState : MoreDetailsUiState
 }
 
-private const val ASTERISK = "[*]"
+
 private const val NY_TIMES_IMG = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
-private const val NY_NOT_FOUND = "No se encontro"
 
 class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
+    private val artistInfoDescriptionHelper: ArtistInfoDescriptionHelper = MoreDetailsViewInjector.artistInfoDescriptionHelper
     private val onActionSubject = Subject<MoreDetailsEvent>()
     override val moreDetailsEventObservable: Observable<MoreDetailsEvent> = onActionSubject
     private lateinit var moreDetailsModel: MoreDetailsModel
@@ -69,7 +69,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateMoreDetailsUiState(artist : Artist){
         uiState = uiState.copy(
             name = artist.artistName,
-            article = artist.artistInfo,
+            article = artistInfoDescriptionHelper.getArtistInfoText(artist),
             url = artist.artistUrl,
             urlBtnEnabled = true
         )
@@ -78,7 +78,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateNoResultsUiState(){
         uiState = uiState.copy(
             name = "",
-            article = "",
+            article = artistInfoDescriptionHelper.getArtistInfoText(),
             url = "" ,
             urlBtnEnabled = false
         )
@@ -120,14 +120,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun getAbstractAsHtml(artistInfo : Artist) : Spanned {
-        return formatHtml(renderAbstractAsHtml(getAbstractText(artistInfo.artistInfo), artistInfo.artistName))
-    }
-
-    private fun getAbstractText(artistArticle: String): String {
-        return if (artistArticle == "")
-            NY_NOT_FOUND
-        else
-            artistArticle
+        return formatHtml(renderAbstractAsHtml(uiState.article, artistInfo.artistName))
     }
 
     private fun createButtonWithLink() {
