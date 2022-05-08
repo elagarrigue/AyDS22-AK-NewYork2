@@ -1,5 +1,7 @@
 package ayds.newyork.songinfo.moredetails.view
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Spanned
@@ -63,7 +65,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         uiState = uiState.copy(
             name = artist.artistName,
             article = artist.artistInfo,
-            url = artist.artistUrl
+            url = artist.artistUrl,
+            urlBtnEnabled = true
         )
     }
 
@@ -71,7 +74,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         uiState = uiState.copy(
             name = "",
             article = "",
-            url = ""
+            url = "" ,
+            urlBtnEnabled = false
         )
     }
 
@@ -91,6 +95,9 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun updateArtistInfo(artistInfoFromRepository : Artist) {
+        updateUiState(artistInfoFromRepository)
+        createButtonWithLink()
+        updateUrlBtnState()
         applyImage()
         applyText(artistInfoFromRepository)
     }
@@ -118,11 +125,35 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             artistArticle
     }
 
-    /*private fun createButtonWithLink() {
-        urlNYTimes?.let{
-            setListenerForLinkBtn()
-        } ?: run {
-            disableLinkBtn()
+    private fun createButtonWithLink() {
+        setListenerForLinkBtn()
+    }
+
+    private fun updateUrlBtnState() {
+        enableActions(uiState.urlBtnEnabled)
+    }
+
+    private fun enableActions(enable: Boolean) {
+        runOnUiThread {
+            btnUrl.isEnabled = enable
+        }
+    }
+
+    private fun setListenerForLinkBtn(){
+        btnUrl.setOnClickListener {
+            openLink()
+        }
+    }
+
+    private fun openLink(){
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.data = Uri.parse(uiState.url)
+        startActivity(intent)
+    }
+
+    /*private fun disableLinkBtn(){
+        runOnUiThread {
+            btnUrl.isEnabled = false
         }
     }*/
 

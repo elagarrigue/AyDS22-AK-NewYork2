@@ -20,7 +20,7 @@ class NYTimesToArtistResolverImpl : NYTimesToArtistResolver {
                 ArtistInfo(
                     artistName,
                     item.getInfo(),
-                    item.getUrl(artistName)
+                    item.getUrl()
                 )
             }
         } catch(e : Exception){
@@ -32,8 +32,8 @@ class NYTimesToArtistResolverImpl : NYTimesToArtistResolver {
         return this[ABSTRACT].asString
     }
 
-    private fun JsonObject.getUrl(artistName: String): String {
-        return renderAbstractAsHtml(this[WEB_URL].asString,artistName)
+    private fun JsonObject.getUrl(): String {
+        return this[WEB_URL].asString
     }
 
     private fun String?.getFirstItem() : JsonObject {
@@ -41,18 +41,5 @@ class NYTimesToArtistResolverImpl : NYTimesToArtistResolver {
         val resp = jsonObject[RESPONSE].asJsonObject
         val articles = resp[DOCS].asJsonArray
         return articles[0].asJsonObject
-    }
-
-    private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
-        val stringBuilder = StringBuilder()
-        stringBuilder.append("<html><div width=400>")
-        stringBuilder.append("<font face=\"arial\">")
-        val textWithBold = abstract
-            .replace("'", " ")
-            .replace("\n", "<br>")
-            .replace("(?i)$artistName".toRegex(), "<b>" + artistName.uppercase(Locale.getDefault()) + "</b>")
-        stringBuilder.append(textWithBold)
-        stringBuilder.append("</font></div></html>")
-        return stringBuilder.toString()
     }
 }

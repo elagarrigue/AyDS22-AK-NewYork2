@@ -28,9 +28,10 @@ private const val ABSTRACT  = "abstract"
 private const val WEB_URL = "web_url"
 private const val ASTERISK = "[*]"
 
-class OtherInfoWindow : AppCompatActivity() {
 
-   /* private lateinit var textAbstract: TextView
+class OtherInfoWindow : AppCompatActivity() {
+/*
+    private lateinit var textAbstract: TextView
     private lateinit var btnUrl: Button
     private lateinit var nyTimesImg: ImageView
 
@@ -202,5 +203,6 @@ class OtherInfoWindow : AppCompatActivity() {
 
     companion object {
         const val ARTIST_NAME_EXTRA = "artistName"
-    }*/
+    }
+ */
 }
