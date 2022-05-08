@@ -54,7 +54,7 @@ internal class NYTimesLocalStorageImpl(context: Context?) : SQLiteOpenHelper(con
         )
     }
 
-    private fun getInfoProjection() : Array<String> = arrayOf(ID_COLUMN, ARTIST_COLUMN, INFO_COLUMN)
+    private fun getInfoProjection() : Array<String> = arrayOf(ID_COLUMN, ARTIST_COLUMN, INFO_COLUMN, SOURCE_COLUMN)
 
     private fun getInfoSelection() : String = "$ARTIST_COLUMN = ?"
 
