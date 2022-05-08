@@ -76,6 +76,7 @@ internal class NYTimesLocalStorageImpl(context: Context?) : SQLiteOpenHelper(con
         val values = ContentValues().apply {
             put(ARTIST_COLUMN, artist.artistName)
             put(INFO_COLUMN, artist.artistInfo)
+            put(SOURCE_COLUMN, artist.artistUrl)
         }
 
         writableDatabase?.insert(ARTIST_INFO_TABLE, null, values)
