@@ -44,9 +44,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_more_details_view)
         initModule()
+        initUiStateWithArtistName()
         initProperties()
         initObservers()
         notifyGetArtistInfoAction()
+    }
+
+    private fun initUiStateWithArtistName() {
+        uiState = uiState.copy(name=intent.getStringExtra(ARTIST_NAME_EXTRA).toString())
     }
 
     private fun initModule() {
