@@ -5,6 +5,8 @@ import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 
 object MoreDetailsViewInjector {
 
+    val artistInfoDescriptionHelper:ArtistInfoDescriptionHelper = ArtistInfoDescriptionHelperImpl()
+
     fun init(moreDetailsView: MoreDetailsView) {
         MoreDetailsModelInjector.initMoreDetailsModel(moreDetailsView)
         MoreDetailsControllerInjector.onViewStarted(moreDetailsView)
