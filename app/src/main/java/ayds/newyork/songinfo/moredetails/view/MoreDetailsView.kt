@@ -103,7 +103,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         createButtonWithLink()
         updateUrlBtnState()
         applyImage()
-        applyText(artistInfoFromRepository)
+        applyText()
     }
 
     private fun applyImage() {
@@ -112,14 +112,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         }
     }
 
-    private fun applyText(artistInfo: Artist) {
+    private fun applyText() {
         runOnUiThread {
-            textAbstract.text = getAbstractAsHtml(artistInfo)
+            textAbstract.text = getAbstractAsHtml()
         }
     }
 
-    private fun getAbstractAsHtml(artistInfo : Artist) : Spanned {
-        return formatHtml(renderAbstractAsHtml(uiState.article, artistInfo.artistName))
+    private fun getAbstractAsHtml() : Spanned {
+        return formatHtml(uiState.article)
     }
 
     private fun createButtonWithLink() {
@@ -146,19 +146,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(uiState.url)
         startActivity(intent)
-    }
-
-    private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
-        val stringBuilder = StringBuilder()
-        stringBuilder.append("<html><div width=400>")
-        stringBuilder.append("<font face=\"arial\">")
-        val textWithBold = abstract
-            .replace("'", " ")
-            .replace("\n", "<br>")
-            .replace("(?i)$artistName".toRegex(), "<b>" + artistName.uppercase(Locale.getDefault()) + "</b>")
-        stringBuilder.append(textWithBold)
-        stringBuilder.append("</font></div></html>")
-        return stringBuilder.toString()
     }
 
     private fun formatHtml(abstractHtml : String) : Spanned {
