@@ -11,7 +11,7 @@ interface MoreDetailsController {
 
 internal class MoreDetailsControllerImpl(
     private val moreDetailsModel: MoreDetailsModel
-    ) : MoreDetailsController{
+) : MoreDetailsController{
 
     private lateinit var moreDetailsView: MoreDetailsView
 
