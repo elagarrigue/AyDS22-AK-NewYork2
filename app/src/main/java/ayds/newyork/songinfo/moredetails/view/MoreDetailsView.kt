@@ -63,7 +63,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         }
     }
 
-    private fun updateMoreDetailsUiState(artist : Artist){
+    private fun updateMoreDetailsUiState(artist : Artist) {
         uiState = uiState.copy(
             name = artist.artistName,
             article = artistInfoDescriptionHelper.getArtistInfoText(artist),
@@ -72,7 +72,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         )
     }
 
-    private fun updateNoResultsUiState(){
+    private fun updateNoResultsUiState() {
         uiState = uiState.copy(
             name = "",
             article = artistInfoDescriptionHelper.getArtistInfoText(),
@@ -91,7 +91,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         onActionSubject.notify(MoreDetailsEvent.GetArtistInfo)
     }
 
-    private fun initObservers(){
+    private fun initObservers() {
         moreDetailsModel.artistObservable
             .subscribe{ value -> updateArtistInfo(value) }
     }
@@ -134,13 +134,13 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         }
     }
 
-    private fun setListenerForLinkBtn(){
+    private fun setListenerForLinkBtn() {
         btnUrl.setOnClickListener {
             openLink()
         }
     }
 
-    private fun openLink(){
+    private fun openLink() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(uiState.url)
         startActivity(intent)

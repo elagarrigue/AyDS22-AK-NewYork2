@@ -3,8 +3,6 @@ package ayds.newyork.songinfo.moredetails.model.repository.external.nytimes
 import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import java.lang.StringBuilder
-import java.util.*
 
 private const val RESPONSE = "response"
 private const val DOCS = "docs"

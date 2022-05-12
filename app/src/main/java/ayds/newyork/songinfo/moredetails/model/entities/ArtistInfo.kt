@@ -1,6 +1,6 @@
 package ayds.newyork.songinfo.moredetails.model.entities
 
-interface Artist{
+interface Artist {
     val artistName: String
     val artistInfo: String
     val artistUrl: String
