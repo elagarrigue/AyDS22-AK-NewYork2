@@ -4,5 +4,5 @@ import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
 
 interface NYTimesService {
 
-    fun getArtist(artistName : String) : ArtistInfo?
+    fun getArtist(artistName: String) : ArtistInfo?
 }

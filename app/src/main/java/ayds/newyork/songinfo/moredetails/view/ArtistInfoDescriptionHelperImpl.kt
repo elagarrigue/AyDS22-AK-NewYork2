@@ -11,30 +11,38 @@ interface ArtistInfoDescriptionHelper {
 }
 
 private const val NY_NOT_FOUND = "Artist not found"
-private const val ASTERISK = "[*]"
+private const val LOCALLY_STORED_SYMBOL = "[*]"
+private const val WIDTH = "400"
+private const val HEADER = "<html><div width=$WIDTH>"
+private const val FONT_NAME = "arial"
+private const val FONT = "<font face=\"$FONT_NAME\">"
+private const val CLOSE_HEADER = "</font></div></html>"
+private const val LINE_BREAK = "<br>"
+private const val OPEN_BOLD = "<b>"
+private const val CLOSE_BOLD = "</b>"
 
 internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
 
     override fun getArtistInfoText(artist: Artist): String {
-        val toReturn : String = when (artist) {
+        val rawArtistInfoText : String = when (artist) {
             is ArtistInfo ->
-                (if (artist.isLocallyStored) ASTERISK else "") + " ${artist.artistInfo} "
+                (if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "") + " ${artist.artistInfo} "
 
             else -> NY_NOT_FOUND
         }
-        return renderAbstractAsHtml(toReturn,artist.artistName)
+        return renderAbstractAsHtml(rawArtistInfoText,artist.artistName)
     }
 
     private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
         val stringBuilder = StringBuilder()
-        stringBuilder.append("<html><div width=400>")
-        stringBuilder.append("<font face=\"arial\">")
+        stringBuilder.append(HEADER)
+        stringBuilder.append(FONT)
         val textWithBold = abstract
             .replace("'", " ")
-            .replace("\n", "<br>")
-            .replace("(?i)$artistName".toRegex(), "<b>" + artistName.uppercase(Locale.getDefault()) + "</b>")
+            .replace("\n", LINE_BREAK)
+            .replace("(?i)$artistName".toRegex(), OPEN_BOLD + artistName.uppercase(Locale.getDefault()) + CLOSE_BOLD)
         stringBuilder.append(textWithBold)
-        stringBuilder.append("</font></div></html>")
+        stringBuilder.append(CLOSE_HEADER)
         return stringBuilder.toString()
     }
 }

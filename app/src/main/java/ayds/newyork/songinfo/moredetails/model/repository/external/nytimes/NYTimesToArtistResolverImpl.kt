@@ -15,7 +15,7 @@ private const val WEB_URL = "web_url"
 class NYTimesToArtistResolverImpl : NYTimesToArtistResolver {
 
     override fun getArtistFromExternalData(serviceData: String?, artistName: String) : ArtistInfo? {
-        return try{
+        return try {
             serviceData?.getFirstItem()?.let { item ->
                 ArtistInfo(
                     artistName,

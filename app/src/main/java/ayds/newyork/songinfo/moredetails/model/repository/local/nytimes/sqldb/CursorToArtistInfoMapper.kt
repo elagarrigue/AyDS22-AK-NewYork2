@@ -12,7 +12,7 @@ internal class CursorToArtistInfoMapperImpl : CursorToArtistInfoMapper {
 
     override fun map(cursor : Cursor) : ArtistInfo? {
         var artistInfo : ArtistInfo? = null
-        if(cursor.moveToNext()){
+        if(cursor.moveToNext()) {
             artistInfo = ArtistInfo(
                 artistName = cursor.getString(cursor.getColumnIndexOrThrow(ARTIST_COLUMN)),
                 artistInfo = cursor.getString(cursor.getColumnIndexOrThrow(INFO_COLUMN)),
