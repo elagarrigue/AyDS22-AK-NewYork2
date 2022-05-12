@@ -5,7 +5,7 @@ import ayds.newyork.songinfo.moredetails.model.repository.ArtistInfoRepository
 import ayds.observer.Observable
 import ayds.observer.Subject
 
-interface MoreDetailsModel{
+interface MoreDetailsModel {
     val artistObservable : Observable<Artist>
 
     fun searchArtist(name: String)
