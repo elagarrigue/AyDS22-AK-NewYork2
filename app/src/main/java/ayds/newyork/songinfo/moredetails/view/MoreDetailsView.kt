@@ -18,8 +18,6 @@ import ayds.newyork.songinfo.moredetails.model.entities.EmptyArtist
 import ayds.observer.Observable
 import ayds.observer.Subject
 import com.squareup.picasso.Picasso
-import java.lang.StringBuilder
-import java.util.*
 
 interface MoreDetailsView {
     val moreDetailsEventObservable: Observable<MoreDetailsEvent>

@@ -6,11 +6,9 @@ import ayds.observer.Observable
 import ayds.observer.Subject
 
 interface MoreDetailsModel{
-
     val artistObservable : Observable<Artist>
 
     fun searchArtist(name: String)
-
     fun getArtistById(id: String): Artist
 }
 
