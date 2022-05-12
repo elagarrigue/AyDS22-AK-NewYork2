@@ -17,7 +17,7 @@ internal class  MoreDetailsModelImpl (private val repository: ArtistInfoReposito
     override val artistObservable = Subject<Artist>()
 
     override fun searchArtist(name: String) {
-        repository.getArtistByName(name).let{
+        repository.getArtistByName(name).let {
             artistObservable.notify(it)
         }
     }
