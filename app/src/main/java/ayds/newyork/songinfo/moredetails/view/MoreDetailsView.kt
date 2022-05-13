@@ -22,6 +22,8 @@ import com.squareup.picasso.Picasso
 interface MoreDetailsView {
     val moreDetailsEventObservable: Observable<MoreDetailsEvent>
     var uiState : MoreDetailsUiState
+
+    fun openExternalLink(url: String)
 }
 
 private const val NY_TIMES_IMG = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
@@ -54,6 +56,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun initModule() {
         MoreDetailsViewInjector.init(this)
         moreDetailsModel = MoreDetailsModelInjector.getMoreDetailsModel()
+    }
+
+    private fun initListeners(){
+        btnUrl.setOnClickListener { notifyOpenArtistInfoUrl() }
+    }
+
+    private fun notifyOpenArtistInfoUrl() {
+        onActionSubject.notify(MoreDetailsEvent.OpenArtistInfoLink)
     }
 
     private fun updateUiState(artist: Artist) {
@@ -98,7 +108,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateArtistInfo(artistInfoFromRepository : Artist) {
         updateUiState(artistInfoFromRepository)
-        createButtonWithLink()
+        initListeners()
         updateUrlBtnState()
         applyImage()
         applyText()
@@ -120,10 +130,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         return formatHtml(uiState.article)
     }
 
-    private fun createButtonWithLink() {
-        setListenerForLinkBtn()
-    }
-
     private fun updateUrlBtnState() {
         enableActions(uiState.urlBtnEnabled)
     }
@@ -134,13 +140,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         }
     }
 
-    private fun setListenerForLinkBtn() {
-        btnUrl.setOnClickListener {
-            openLink()
-        }
-    }
-
-    private fun openLink() {
+    override fun openExternalLink(url: String) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(uiState.url)
         startActivity(intent)
