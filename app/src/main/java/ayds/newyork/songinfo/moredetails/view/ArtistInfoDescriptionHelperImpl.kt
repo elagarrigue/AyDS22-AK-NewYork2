@@ -26,7 +26,7 @@ internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
     override fun getArtistInfoText(artist: Artist): String {
         val rawArtistInfoText : String = when (artist) {
             is ArtistInfo ->
-                (if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "") + " ${artist.artistInfo} "
+                "${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.artistInfo}"
 
             else -> NY_NOT_FOUND
         }

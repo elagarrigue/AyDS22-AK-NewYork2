@@ -6,7 +6,5 @@ interface NYTimesLocalStorage {
 
     fun getArtistByName(name : String) : ArtistInfo?
 
-    fun getArtistById(id : String) : ArtistInfo?
-
     fun saveArtist(artist : ArtistInfo)
 }
