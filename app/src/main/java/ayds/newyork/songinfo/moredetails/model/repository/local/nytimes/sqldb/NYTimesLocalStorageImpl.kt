@@ -67,11 +67,6 @@ internal class NYTimesLocalStorageImpl(context: Context?) : SQLiteOpenHelper(con
         return mapper.map(cursor)
     }
 
-    override fun getArtistById(id: String): ArtistInfo? {
-        val cursor = createIdCursor(id)
-        return mapper.map(cursor)
-    }
-
     override fun saveArtist(artist: ArtistInfo) {
         val values = ContentValues().apply {
             put(ARTIST_COLUMN, artist.artistName)
