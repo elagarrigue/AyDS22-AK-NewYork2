@@ -13,7 +13,7 @@ class ArtistInfoDescriptionHelperImplTest {
     fun `given a local artist whose article does not contain their name it should return the description`(){
         val artistInfo: Artist = ArtistInfo(
         "name",
-        "[*] The Daily Caller is giving away one gun a week until Election Day.",
+        "The Daily Caller is giving away one gun a week until Election Day.",
         "articleUrl",
         true
         )
@@ -38,7 +38,7 @@ class ArtistInfoDescriptionHelperImplTest {
         val result = artistInfoDescriptionHelperImplTest.getArtistInfoText(artistInfo)
 
         val expected =
-            "<html><div width=400><font face=\"arial\">[*] The Daily Caller is giving away one gun a week until Election Day.</font></div></html>"
+            "<html><div width=400><font face=\"arial\"> The Daily Caller is giving away one gun a week until Election Day.</font></div></html>"
 
         Assert.assertEquals(expected, result)
     }
