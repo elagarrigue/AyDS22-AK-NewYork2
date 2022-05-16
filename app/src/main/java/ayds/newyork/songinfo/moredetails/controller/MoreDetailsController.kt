@@ -1,8 +1,5 @@
 package ayds.newyork.songinfo.moredetails.controller
 
-import android.content.Intent
-import android.net.Uri
-import androidx.core.content.ContextCompat.startActivity
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsEvent
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsView
