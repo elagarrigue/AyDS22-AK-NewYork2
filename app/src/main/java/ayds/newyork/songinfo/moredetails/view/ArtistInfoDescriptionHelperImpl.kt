@@ -24,13 +24,10 @@ private const val CLOSE_BOLD = "</b>"
 internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
 
     override fun getArtistInfoText(artist: Artist): String {
-        val rawArtistInfoText : String = when (artist) {
-            is ArtistInfo ->
-                "${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.artistInfo}"
-
+        return when(artist){
+            is ArtistInfo -> renderAbstractAsHtml("${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.artistInfo}",artist.artistName)
             else -> NY_NOT_FOUND
         }
-        return renderAbstractAsHtml(rawArtistInfoText,artist.artistName)
     }
 
     private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
