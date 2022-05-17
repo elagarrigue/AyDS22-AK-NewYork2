@@ -25,21 +25,24 @@ internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
 
     override fun getArtistInfoText(artist: Artist): String {
         return when(artist){
-            is ArtistInfo -> renderAbstractAsHtml("${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.artistInfo}",artist.artistName)
-            else -> NY_NOT_FOUND
+            is ArtistInfo -> boldArtisName(renderAbstractAsHtml("${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.artistInfo}"),artist.artistName)
+            else -> renderAbstractAsHtml(NY_NOT_FOUND)
         }
     }
 
-    private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
+    private fun renderAbstractAsHtml(abstract: String): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append(HEADER)
         stringBuilder.append(FONT)
-        val textWithBold = abstract
+        val renderText = abstract
             .replace("'", " ")
             .replace("\n", LINE_BREAK)
-            .replace("(?i)$artistName".toRegex(), OPEN_BOLD + artistName.uppercase(Locale.getDefault()) + CLOSE_BOLD)
-        stringBuilder.append(textWithBold)
+        stringBuilder.append(renderText)
         stringBuilder.append(CLOSE_HEADER)
         return stringBuilder.toString()
+    }
+
+    private fun boldArtisName(abstract: String, artistName: String) : String{
+        return abstract.replace("(?i)$artistName".toRegex(), OPEN_BOLD + artistName.uppercase(Locale.getDefault()) + CLOSE_BOLD)
     }
 }

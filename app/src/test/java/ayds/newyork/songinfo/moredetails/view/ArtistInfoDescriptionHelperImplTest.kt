@@ -84,7 +84,7 @@ class ArtistInfoDescriptionHelperImplTest {
 
         val result = artistInfoDescriptionHelperImplTest.getArtistInfoText(artistInfo)
 
-        val expected = "<html><div width=400><font face=\"arial\"><b></b>A<b></b>r<b></b>t<b></b>i<b></b>s<b></b>t<b></b> <b></b>n<b></b>o<b></b>t<b></b> <b></b>f<b></b>o<b></b>u<b></b>n<b></b>d<b></b></font></div></html>"
+        val expected = "<html><div width=400><font face=\"arial\">Artist not found</font></div></html>"
 
         Assert.assertEquals(expected, result)
     }
