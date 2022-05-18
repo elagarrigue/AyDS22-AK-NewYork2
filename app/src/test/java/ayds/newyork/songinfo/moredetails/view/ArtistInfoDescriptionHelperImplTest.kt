@@ -13,10 +13,10 @@ class ArtistInfoDescriptionHelperImplTest {
     @Test
     fun `given a local artist whose article does not contain their name it should return the description`() {
         val artistInfo: Artist = ArtistInfo(
-        "name",
-        "The Daily Caller is giving away one gun a week until Election Day.",
-        "articleUrl",
-        true
+            "name",
+            "The Daily Caller is giving away one gun a week until Election Day.",
+            "articleUrl",
+            true,
         )
 
         val result = artistInfoDescriptionHelperImplTest.getArtistInfoText(artistInfo)
@@ -45,7 +45,7 @@ class ArtistInfoDescriptionHelperImplTest {
     }
 
     @Test
-    fun `given a external artist whose article does contain their name it should return the description with bolded name`() {
+    fun `given a artist whose article does contain their name it should return the description with bolded name`() {
         val artistInfo: Artist = ArtistInfo(
             "Duki",
             "Ned Martel reviews documentary movie Raging Dove, directed by Duki Dror (S)",
@@ -57,23 +57,6 @@ class ArtistInfoDescriptionHelperImplTest {
 
         val expected =
         "<html><div width=400><font face=\"arial\"> Ned Martel reviews documentary movie Raging Dove, directed by <b>DUKI</b> Dror (S)</font></div></html>"
-
-        Assert.assertEquals(expected, result)
-    }
-
-    @Test
-    fun `given a local artist whose article does contain their name it should return the description with bolded name`() {
-        val artistInfo: Artist = ArtistInfo(
-            "Duki",
-            "Ned Martel reviews documentary movie Raging Dove, directed by Duki Dror (S)",
-            "articleUrl",
-            true
-        )
-
-        val result = artistInfoDescriptionHelperImplTest.getArtistInfoText(artistInfo)
-
-        val expected =
-            "<html><div width=400><font face=\"arial\">[*] Ned Martel reviews documentary movie Raging Dove, directed by <b>DUKI</b> Dror (S)</font></div></html>"
 
         Assert.assertEquals(expected, result)
     }

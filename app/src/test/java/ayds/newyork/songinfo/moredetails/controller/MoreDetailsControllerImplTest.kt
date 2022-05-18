@@ -31,7 +31,7 @@ class MoreDetailsControllerImplTest {
 
     @Test
     fun `on search event should search artist`() {
-        every { moreDetailsView.uiState } returns MoreDetailsUiState(name = "name",article = "article",url = "url",false)
+        every { moreDetailsView.uiState } returns MoreDetailsUiState(name = "name")
 
         onActionSubject.notify(MoreDetailsEvent.GetArtistInfo)
 
@@ -40,7 +40,7 @@ class MoreDetailsControllerImplTest {
 
     @Test
     fun `on open artist info link event should open external link`() {
-        every { moreDetailsView.uiState } returns MoreDetailsUiState(name = "name",article = "article",url = "url",false)
+        every { moreDetailsView.uiState } returns MoreDetailsUiState(url = "url")
 
         onActionSubject.notify(MoreDetailsEvent.OpenArtistInfoLink)
 
