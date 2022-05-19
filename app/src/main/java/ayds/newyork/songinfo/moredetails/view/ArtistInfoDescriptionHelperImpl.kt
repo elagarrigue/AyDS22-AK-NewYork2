@@ -25,10 +25,18 @@ internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
 
     override fun getArtistInfoText(artist: Artist): String {
         val abstract  = "${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.artistInfo}"
-        return when(artist){
-            is ArtistInfo -> boldArtisName(renderAbstractAsHtml(abstract),artist.artistName)
-            else -> renderAbstractAsHtml(NY_NOT_FOUND)
+        return when(artist) {
+            is ArtistInfo -> getFormattedArtistInfoTextArtist(abstract, artist)
+            else -> getNotFoundArtistInfoText()
         }
+    }
+
+    private fun getFormattedArtistInfoTextArtist(abstract: String, artist: Artist): String {
+        return boldArtisName(renderAbstractAsHtml(abstract),artist.artistName)
+    }
+
+    private fun getNotFoundArtistInfoText(): String {
+        return renderAbstractAsHtml(NY_NOT_FOUND)
     }
 
     private fun renderAbstractAsHtml(abstract: String): String {
