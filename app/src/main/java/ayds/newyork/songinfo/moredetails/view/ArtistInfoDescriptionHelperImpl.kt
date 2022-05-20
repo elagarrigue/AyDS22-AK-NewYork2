@@ -24,25 +24,34 @@ private const val CLOSE_BOLD = "</b>"
 internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
 
     override fun getArtistInfoText(artist: Artist): String {
-        val rawArtistInfoText : String = when (artist) {
-            is ArtistInfo ->
-                "${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.artistInfo}"
-
-            else -> NY_NOT_FOUND
+        val abstract  = "${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.artistInfo}"
+        return when(artist) {
+            is ArtistInfo -> getFormattedArtistInfoTextArtist(abstract, artist)
+            else -> getNotFoundArtistInfoText()
         }
-        return renderAbstractAsHtml(rawArtistInfoText,artist.artistName)
     }
 
-    private fun renderAbstractAsHtml(abstract: String, artistName: String): String {
+    private fun getFormattedArtistInfoTextArtist(abstract: String, artist: Artist): String {
+        return boldArtisName(renderAbstractAsHtml(abstract),artist.artistName)
+    }
+
+    private fun getNotFoundArtistInfoText(): String {
+        return renderAbstractAsHtml(NY_NOT_FOUND)
+    }
+
+    private fun renderAbstractAsHtml(abstract: String): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append(HEADER)
         stringBuilder.append(FONT)
-        val textWithBold = abstract
+        val renderText = abstract
             .replace("'", " ")
             .replace("\n", LINE_BREAK)
-            .replace("(?i)$artistName".toRegex(), OPEN_BOLD + artistName.uppercase(Locale.getDefault()) + CLOSE_BOLD)
-        stringBuilder.append(textWithBold)
+        stringBuilder.append(renderText)
         stringBuilder.append(CLOSE_HEADER)
         return stringBuilder.toString()
+    }
+
+    private fun boldArtisName(abstract: String, artistName: String) : String{
+        return abstract.replace("(?i)$artistName".toRegex(), OPEN_BOLD + artistName.uppercase(Locale.getDefault()) + CLOSE_BOLD)
     }
 }
