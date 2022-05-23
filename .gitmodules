@@ -1,0 +1,3 @@
+[submodule "libs/NewYorkTimesData"]
+	path = libs/NewYorkTimesData
+	url = https://github.com/FacundoAlvarado9/AyDS-NewYork2-Submodule.git
