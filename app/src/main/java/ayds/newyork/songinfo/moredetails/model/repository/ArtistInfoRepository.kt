@@ -3,8 +3,9 @@ package ayds.newyork.songinfo.moredetails.model.repository
 import ayds.newyork.songinfo.moredetails.model.entities.Artist
 import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyArtist
-import ayds.newyork.songinfo.moredetails.model.repository.external.nytimes.NYTimesService
+import ayds.newyork2.newyorkdata.external.nytimes.NYTimesService
 import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.NYTimesLocalStorage
+import ayds.newyork2.newyorkdata.external.nytimes.ExternalArtistInfo
 
 interface ArtistInfoRepository {
 
@@ -22,7 +23,8 @@ internal class ArtistInfoRepositoryImpl (
             markArtistInfoAsLocal(artistInfo)
         } else {
             try {
-                artistInfo = nytService.getArtist(name)
+                var artist = nytService.getArtist(name)
+                artistInfo = mapArtistInfo(artist)
                 if (artistInfo != null) {
                     nyTimesLocalStorage.saveArtist(artistInfo)
                 }
@@ -37,4 +39,16 @@ internal class ArtistInfoRepositoryImpl (
         artistInfo.isLocallyStored = true
     }
 
+    private fun mapArtistInfo(artist: ExternalArtistInfo?): ArtistInfo? {
+        return if (artist!=null) {
+        ArtistInfo(
+            artist.artistName,
+            artist.artistInfo,
+            artist.artistUrl,
+            false
+        )
+        }
+        else
+            null
+    }
 }
