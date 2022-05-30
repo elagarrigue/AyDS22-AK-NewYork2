@@ -35,6 +35,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     override val moreDetailsEventObservable: Observable<MoreDetailsEvent> = onActionSubject
     private lateinit var moreDetailsModel: MoreDetailsModel
     private lateinit var textAbstract: TextView
+    private lateinit var textSource: TextView
     private lateinit var btnUrl: Button
     private lateinit var nyTimesImg: ImageView
     override var uiState = MoreDetailsUiState()
@@ -93,6 +94,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initProperties() {
         textAbstract = findViewById(R.id.textPane2)
+        textSource = findViewById(R.id.textPaneSource)
         btnUrl = findViewById(R.id.openUrlButton)
         nyTimesImg = findViewById(R.id.imageView)
     }
@@ -122,6 +124,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun applyText() {
         runOnUiThread {
+            textSource.text = "New York Times"
             textAbstract.text = getAbstractAsHtml()
         }
     }
