@@ -12,9 +12,9 @@ import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
-import ayds.newyork.songinfo.moredetails.model.entities.Artist
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyArtist
+import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.observer.Observable
 import ayds.observer.Subject
 import com.squareup.picasso.Picasso
@@ -66,18 +66,18 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         onActionSubject.notify(MoreDetailsEvent.OpenArtistInfoLink)
     }
 
-    private fun updateUiState(artist: Artist) {
+    private fun updateUiState(artist: Card) {
         when (artist) {
-            is ArtistInfo -> updateMoreDetailsUiState(artist)
-            EmptyArtist -> updateNoResultsUiState()
+            is ExternalCard -> updateMoreDetailsUiState(artist)
+            EmptyCard -> updateNoResultsUiState()
         }
     }
 
-    private fun updateMoreDetailsUiState(artist : Artist) {
+    private fun updateMoreDetailsUiState(artist : Card) {
         uiState = uiState.copy(
             name = artist.artistName,
             article = artistInfoDescriptionHelper.getArtistInfoText(artist),
-            url = artist.artistUrl,
+            url = artist.infoUrl,
             urlBtnEnabled = true
         )
     }
@@ -106,7 +106,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             .subscribe{ value -> updateArtistInfo(value) }
     }
 
-    private fun updateArtistInfo(artistInfoFromRepository : Artist) {
+    private fun updateArtistInfo(artistInfoFromRepository : Card) {
         updateUiState(artistInfoFromRepository)
         initListeners()
         updateUrlBtnState()

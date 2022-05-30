@@ -1,22 +1,24 @@
 package ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.sqldb
 
 import android.database.Cursor
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
 
 interface CursorToArtistInfoMapper {
 
-    fun map(cursor : Cursor) : ArtistInfo?
+    fun map(cursor : Cursor) : ExternalCard?
 }
 
 internal class CursorToArtistInfoMapperImpl : CursorToArtistInfoMapper {
 
-    override fun map(cursor : Cursor) : ArtistInfo? {
-        var artistInfo : ArtistInfo? = null
+    override fun map(cursor : Cursor) : ExternalCard? {
+        var artistInfo : ExternalCard? = null
         if(cursor.moveToNext()) {
-            artistInfo = ArtistInfo(
+            artistInfo = ExternalCard(
                 artistName = cursor.getString(cursor.getColumnIndexOrThrow(ARTIST_COLUMN)),
-                artistInfo = cursor.getString(cursor.getColumnIndexOrThrow(INFO_COLUMN)),
-                artistUrl = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_COLUMN))
+                description = cursor.getString(cursor.getColumnIndexOrThrow(INFO_COLUMN)),
+                infoUrl = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_COLUMN)),
+                source = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_COLUMN)),
+                sourceLogoUrl = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_COLUMN))
             )
         }
         cursor.close()

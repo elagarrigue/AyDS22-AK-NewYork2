@@ -1,10 +1,10 @@
 package ayds.newyork.songinfo.moredetails.model.repository.local.nytimes
 
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
 
 interface NYTimesLocalStorage {
 
-    fun getArtistByName(name : String) : ArtistInfo?
+    fun getArtistByName(name : String) : ExternalCard?
 
-    fun saveArtist(artist : ArtistInfo)
+    fun saveArtist(artist : ExternalCard)
 }

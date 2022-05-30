@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
+import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
 import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.NYTimesLocalStorage
 
 private const val nameDataBase : String = "dictionary.db"
@@ -54,7 +54,7 @@ internal class NYTimesLocalStorageImpl(context: Context?) : SQLiteOpenHelper(con
         )
     }
 
-    private fun getInfoProjection() : Array<String> = arrayOf(ID_COLUMN, ARTIST_COLUMN, INFO_COLUMN, SOURCE_COLUMN)
+    private fun getInfoProjection() : Array<String> = arrayOf(ID_COLUMN, ARTIST_COLUMN, INFO_COLUMN,URL_COLUMN, SOURCE_COLUMN,SOURCE_LOGO_COLUMN)
 
     private fun getInfoSelection() : String = "$ARTIST_COLUMN = ?"
 
@@ -62,16 +62,18 @@ internal class NYTimesLocalStorageImpl(context: Context?) : SQLiteOpenHelper(con
 
     private fun getInfoSort() : String = "$ARTIST_COLUMN DESC"
 
-    override fun getArtistByName(name: String): ArtistInfo? {
+    override fun getArtistByName(name: String): ExternalCard? {
         val cursor = createArtistNameCursor(name)
         return mapper.map(cursor)
     }
 
-    override fun saveArtist(artist: ArtistInfo) {
+    override fun saveArtist(artist: ExternalCard) {
         val values = ContentValues().apply {
             put(ARTIST_COLUMN, artist.artistName)
-            put(INFO_COLUMN, artist.artistInfo)
-            put(SOURCE_COLUMN, artist.artistUrl)
+            put(INFO_COLUMN, artist.description)
+            put(URL_COLUMN, artist.infoUrl)
+            put(SOURCE_COLUMN, artist.source)
+            put(SOURCE_LOGO_COLUMN, artist.sourceLogoUrl)
         }
 
         writableDatabase?.insert(ARTIST_INFO_TABLE, null, values)
