@@ -7,6 +7,8 @@ import ayds.newyork2.newyorkdata.external.nytimes.NYTimesService
 import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.NYTimesLocalStorage
 import ayds.newyork2.newyorkdata.external.nytimes.ExternalArtistInfo
 
+private const val SOURCE_LOGO_URL : String = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
+
 interface ArtistInfoRepository {
 
     fun getArtistByName(name: String) : Card
@@ -45,8 +47,8 @@ internal class ArtistInfoRepositoryImpl (
             artist.artistName,
             artist.artistInfo,
             artist.artistUrl,
-            "NewYorkTimes",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU",
+            1,
+            SOURCE_LOGO_URL,
             false
         )
         }

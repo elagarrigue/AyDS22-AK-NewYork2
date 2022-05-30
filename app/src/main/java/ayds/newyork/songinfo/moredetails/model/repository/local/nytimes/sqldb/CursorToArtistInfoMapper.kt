@@ -16,9 +16,9 @@ internal class CursorToArtistInfoMapperImpl : CursorToArtistInfoMapper {
             artistInfo = ExternalCard(
                 artistName = cursor.getString(cursor.getColumnIndexOrThrow(ARTIST_COLUMN)),
                 description = cursor.getString(cursor.getColumnIndexOrThrow(INFO_COLUMN)),
-                infoUrl = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_COLUMN)),
-                source = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_COLUMN)),
-                sourceLogoUrl = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_COLUMN))
+                infoUrl = cursor.getString(cursor.getColumnIndexOrThrow(URL_COLUMN)),
+                source = cursor.getInt(cursor.getColumnIndexOrThrow(SOURCE_COLUMN)),
+                sourceLogoUrl = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_LOGO_COLUMN))
             )
         }
         cursor.close()

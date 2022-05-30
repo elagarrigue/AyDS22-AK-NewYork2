@@ -1,13 +1,13 @@
 package ayds.newyork.songinfo.moredetails.view
 
-import ayds.newyork.songinfo.moredetails.model.entities.Artist
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyArtist
+import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import java.lang.StringBuilder
 import java.util.*
 
 interface ArtistInfoDescriptionHelper {
-    fun getArtistInfoText(artist: Artist = EmptyArtist) : String
+    fun getArtistInfoText(artist: Card = EmptyCard) : String
 }
 
 private const val NY_NOT_FOUND = "Artist not found"
@@ -23,15 +23,15 @@ private const val CLOSE_BOLD = "</b>"
 
 internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
 
-    override fun getArtistInfoText(artist: Artist): String {
-        val abstract  = "${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.artistInfo}"
+    override fun getArtistInfoText(artist: Card): String {
+        val abstract  = "${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.description}"
         return when(artist) {
-            is ArtistInfo -> getFormattedArtistInfoTextArtist(abstract, artist)
+            is ExternalCard -> getFormattedArtistInfoTextArtist(abstract, artist)
             else -> getNotFoundArtistInfoText()
         }
     }
 
-    private fun getFormattedArtistInfoTextArtist(abstract: String, artist: Artist): String {
+    private fun getFormattedArtistInfoTextArtist(abstract: String, artist: Card): String {
         return boldArtisName(renderAbstractAsHtml(abstract),artist.artistName)
     }
 

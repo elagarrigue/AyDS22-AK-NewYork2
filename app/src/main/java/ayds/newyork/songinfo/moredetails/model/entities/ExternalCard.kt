@@ -4,7 +4,7 @@ interface Card {
     val artistName: String
     val description: String
     val infoUrl: String
-    val source: String
+    val source: Int
     val sourceLogoUrl: String
     var isLocallyStored: Boolean
 }
@@ -13,7 +13,7 @@ data class ExternalCard(
     override val artistName: String,
     override val description: String,
     override val infoUrl: String,
-    override val source: String,
+    override val source: Int,
     override val sourceLogoUrl: String,
     override var isLocallyStored: Boolean = false
 ) : Card
@@ -22,7 +22,7 @@ object EmptyCard : Card {
     override val artistName: String = ""
     override val description: String = ""
     override val infoUrl: String = ""
-    override val source: String = ""
+    override val source: Int = 0
     override val sourceLogoUrl: String = ""
     override var isLocallyStored: Boolean = false
 }
