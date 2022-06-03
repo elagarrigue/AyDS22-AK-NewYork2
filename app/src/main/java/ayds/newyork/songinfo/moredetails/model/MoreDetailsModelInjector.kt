@@ -1,10 +1,12 @@
 package ayds.newyork.songinfo.moredetails.model
 
 import android.content.Context
+import ayds.lisboa1.lastfm.LastFMInjector
 import ayds.newyork.songinfo.moredetails.model.repository.ArtistInfoRepository
 import ayds.newyork.songinfo.moredetails.model.repository.ArtistInfoRepositoryImpl
 import ayds.newyork.songinfo.moredetails.model.repository.external.Broker
 import ayds.newyork.songinfo.moredetails.model.repository.external.BrokerImpl
+import ayds.newyork.songinfo.moredetails.model.repository.external.LastFMProxy
 import ayds.newyork.songinfo.moredetails.model.repository.external.NewYorkTimesProxy
 import ayds.newyork2.newyorkdata.nytimes.NYTimesInjector
 import ayds.newyork2.newyorkdata.nytimes.NYTimesService
@@ -21,7 +23,8 @@ object MoreDetailsModelInjector {
 
     fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
         val nytimesProxy = NewYorkTimesProxy(NYTimesInjector.nyTimesService)
-        val broker : Broker = BrokerImpl(nytimesProxy)
+        val lastFmProxy = LastFMProxy(LastFMInjector.lastFMService)
+        val broker : Broker = BrokerImpl(nytimesProxy, lastFmProxy)
 
         val nyTimesLocalStorage : NYTimesLocalStorage = NYTimesLocalStorageImpl(moreDetailsView as Context)
         val nytService : NYTimesService = NYTimesInjector.nyTimesService
