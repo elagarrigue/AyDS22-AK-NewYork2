@@ -3,6 +3,7 @@ package ayds.newyork.songinfo.moredetails.model.repository
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
 import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
+import ayds.newyork.songinfo.moredetails.model.entities.Source
 import ayds.newyork2.newyorkdata.nytimes.NYTimesService
 import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.NYTimesLocalStorage
 import ayds.newyork2.newyorkdata.nytimes.NYTimesArtistInfo
@@ -47,7 +48,7 @@ internal class ArtistInfoRepositoryImpl (
             artist.artistName,
             artist.artistInfo,
             artist.artistUrl,
-            1,
+            Source.NEWYORKTIMES,
             SOURCE_LOGO_URL,
             false
         )

@@ -72,7 +72,7 @@ internal class NYTimesLocalStorageImpl(context: Context?) : SQLiteOpenHelper(con
             put(ARTIST_COLUMN, artist.artistName)
             put(INFO_COLUMN, artist.description)
             put(URL_COLUMN, artist.infoUrl)
-            put(SOURCE_COLUMN, artist.source)
+            put(SOURCE_COLUMN, artist.source.ordinal)
             put(SOURCE_LOGO_COLUMN, artist.sourceLogoUrl)
         }
 
