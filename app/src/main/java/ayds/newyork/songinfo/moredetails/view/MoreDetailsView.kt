@@ -67,14 +67,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         onActionSubject.notify(MoreDetailsEvent.OpenArtistInfoLink)
     }
 
-    private fun updateUiState(artist: Card) {
+    private fun updateUiState(artist: List<Card>) {
         when (artist) {
             is ExternalCard -> updateMoreDetailsUiState(artist)
             EmptyCard -> updateNoResultsUiState()
         }
     }
 
-    private fun updateMoreDetailsUiState(artist : Card) {
+    private fun updateMoreDetailsUiState(artist : List<Card>) {
         uiState = uiState.copy(
             name = artist.artistName,
             article = artistInfoDescriptionHelper.getArtistInfoText(artist),
@@ -108,7 +108,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             .subscribe{ value -> updateArtistInfo(value) }
     }
 
-    private fun updateArtistInfo(artistInfoFromRepository : Card) {
+    private fun updateArtistInfo(artistInfoFromRepository : List<Card>) {
         updateUiState(artistInfoFromRepository)
         initListeners()
         updateUrlBtnState()

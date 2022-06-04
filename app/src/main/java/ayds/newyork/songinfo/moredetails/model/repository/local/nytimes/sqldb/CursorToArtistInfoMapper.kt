@@ -6,14 +6,15 @@ import ayds.newyork.songinfo.moredetails.model.entities.Source
 
 interface CursorToArtistInfoMapper {
 
-    fun map(cursor : Cursor) : ExternalCard?
+    fun map(cursor : Cursor) : List<ExternalCard>
 }
 
 internal class CursorToArtistInfoMapperImpl : CursorToArtistInfoMapper {
 
-    override fun map(cursor : Cursor) : ExternalCard? {
+    override fun map(cursor : Cursor) : List<ExternalCard> {
         var artistInfo : ExternalCard? = null
-        if(cursor.moveToNext()) {
+        var cardsList : MutableList<ExternalCard> = mutableListOf()
+        while(cursor.moveToNext()) {
             val ordinalSource = cursor.getInt(cursor.getColumnIndexOrThrow(SOURCE_COLUMN))
             artistInfo = ExternalCard(
                 artistName = cursor.getString(cursor.getColumnIndexOrThrow(ARTIST_COLUMN)),
@@ -22,8 +23,9 @@ internal class CursorToArtistInfoMapperImpl : CursorToArtistInfoMapper {
                 source = Source.values()[ordinalSource],
                 sourceLogoUrl = cursor.getString(cursor.getColumnIndexOrThrow(SOURCE_LOGO_COLUMN))
             )
+            cardsList.add(artistInfo)
         }
         cursor.close()
-        return artistInfo
+        return cardsList
     }
 }

@@ -10,7 +10,6 @@ import ayds.newyork.songinfo.moredetails.model.repository.external.LastFMProxy
 import ayds.newyork.songinfo.moredetails.model.repository.external.NewYorkTimesProxy
 import ayds.newyork.songinfo.moredetails.model.repository.external.WikipediaDataProxy
 import ayds.newyork2.newyorkdata.nytimes.NYTimesInjector
-import ayds.newyork2.newyorkdata.nytimes.NYTimesService
 import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.NYTimesLocalStorage
 import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.sqldb.NYTimesLocalStorageImpl
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsView
@@ -30,8 +29,7 @@ object MoreDetailsModelInjector {
         val broker : Broker = BrokerImpl(nytimesProxy, lastFmProxy, wikipediaProxy)
 
         val nyTimesLocalStorage : NYTimesLocalStorage = NYTimesLocalStorageImpl(moreDetailsView as Context)
-        val nytService : NYTimesService = NYTimesInjector.nyTimesService
-        val repository : ArtistInfoRepository = ArtistInfoRepositoryImpl(nyTimesLocalStorage, nytService)
+        val repository : ArtistInfoRepository = ArtistInfoRepositoryImpl(nyTimesLocalStorage, broker)
         moreDetailsModel = MoreDetailsModelImpl(repository)
     }
 

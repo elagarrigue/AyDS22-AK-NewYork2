@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
 import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.NYTimesLocalStorage
 
@@ -38,44 +39,27 @@ internal class NYTimesLocalStorageImpl(context: Context?) : SQLiteOpenHelper(con
         )
     }
 
-    private fun createIdCursor(id: String) : Cursor{
-        val db = this.readableDatabase
-        val projection = getInfoProjection()
-        val selection = getIdSelection()
-        val selectionArgs = arrayOf(id)
-        return db.query(
-            ARTIST_INFO_TABLE,
-            projection,
-            selection,
-            selectionArgs,
-            null,
-            null,
-            null
-        )
-    }
-
     private fun getInfoProjection() : Array<String> = arrayOf(ID_COLUMN, ARTIST_COLUMN, INFO_COLUMN,URL_COLUMN, SOURCE_COLUMN,SOURCE_LOGO_COLUMN)
 
     private fun getInfoSelection() : String = "$ARTIST_COLUMN = ?"
 
-    private fun getIdSelection() : String = "$ID_COLUMN = ?"
-
     private fun getInfoSort() : String = "$ARTIST_COLUMN DESC"
 
-    override fun getArtistByName(name: String): ExternalCard? {
+    override fun getArtistByName(name: String): List<ExternalCard> {
         val cursor = createArtistNameCursor(name)
         return mapper.map(cursor)
     }
 
-    override fun saveArtist(artist: ExternalCard) {
-        val values = ContentValues().apply {
-            put(ARTIST_COLUMN, artist.artistName)
-            put(INFO_COLUMN, artist.description)
-            put(URL_COLUMN, artist.infoUrl)
-            put(SOURCE_COLUMN, artist.source.ordinal)
-            put(SOURCE_LOGO_COLUMN, artist.sourceLogoUrl)
+    override fun saveArtist(artist: List<Card>) {
+        artist.forEach() {
+            val values = ContentValues().apply {
+                put(ARTIST_COLUMN, it.artistName)
+                put(INFO_COLUMN, it.description)
+                put(URL_COLUMN, it.infoUrl)
+                put(SOURCE_COLUMN, it.source.ordinal)
+                put(SOURCE_LOGO_COLUMN, it.sourceLogoUrl)
+            }
+            writableDatabase?.insert(ARTIST_INFO_TABLE, null, values)
         }
-
-        writableDatabase?.insert(ARTIST_INFO_TABLE, null, values)
     }
 }
