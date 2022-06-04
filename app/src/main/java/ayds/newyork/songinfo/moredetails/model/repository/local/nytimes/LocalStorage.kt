@@ -2,9 +2,9 @@ package ayds.newyork.songinfo.moredetails.model.repository.local.nytimes
 
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 
-interface NYTimesLocalStorage {
+interface LocalStorage {
 
-    fun getArtistByName(name : String) : List<Card>
+    fun getCardsByName(name : String) : List<Card>
 
-    fun saveArtist(artist : List<Card>)
+    fun saveCards(artist : List<Card>)
 }
