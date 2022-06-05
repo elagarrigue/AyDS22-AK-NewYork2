@@ -19,7 +19,7 @@ class ArtistInfoDescriptionHelperImplTest {
             true,
         )
 
-        val result = artistInfoDescriptionHelperImplTest.getArtistInfoText(artistInfo)
+        val result = artistInfoDescriptionHelperImplTest.getCardText(artistInfo)
 
         val expected =
             "<html><div width=400><font face=\"arial\">[*] The Daily Caller is giving away one gun a week until Election Day.</font></div></html>"
@@ -36,7 +36,7 @@ class ArtistInfoDescriptionHelperImplTest {
             false
         )
 
-        val result = artistInfoDescriptionHelperImplTest.getArtistInfoText(artistInfo)
+        val result = artistInfoDescriptionHelperImplTest.getCardText(artistInfo)
 
         val expected =
             "<html><div width=400><font face=\"arial\"> The Daily Caller is giving away one gun a week until Election Day.</font></div></html>"
@@ -53,7 +53,7 @@ class ArtistInfoDescriptionHelperImplTest {
             false
         )
 
-        val result = artistInfoDescriptionHelperImplTest.getArtistInfoText(artistInfo)
+        val result = artistInfoDescriptionHelperImplTest.getCardText(artistInfo)
 
         val expected =
         "<html><div width=400><font face=\"arial\"> Ned Martel reviews documentary movie Raging Dove, directed by <b>DUKI</b> Dror (S)</font></div></html>"
@@ -65,7 +65,7 @@ class ArtistInfoDescriptionHelperImplTest {
     fun `given a non artist info it should return the artist not found description`() {
         val artistInfo: Artist = EmptyArtist
 
-        val result = artistInfoDescriptionHelperImplTest.getArtistInfoText(artistInfo)
+        val result = artistInfoDescriptionHelperImplTest.getCardText(artistInfo)
 
         val expected = "<html><div width=400><font face=\"arial\">Artist not found</font></div></html>"
 

@@ -24,6 +24,7 @@ internal class CardRepositoryImpl (
                 if (!externalCardsList.isEmpty()) {
                     localStorage.saveCards(externalCardsList)
                 }
+                localCardsList = externalCardsList
             } catch (e: Exception) {
                 localCardsList = mutableListOf()
             }
