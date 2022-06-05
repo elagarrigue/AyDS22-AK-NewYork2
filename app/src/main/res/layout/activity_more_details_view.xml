@@ -17,6 +17,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside"/>
 
+    <TextView
+        android:id="@+id/sourceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:ignore="MissingConstraints"
+        tools:text="NewyorkTimes" />
+
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -28,7 +43,7 @@
         >
 
         <TextView
-            android:id="@+id/textPane2"
+            android:id="@+id/descriptionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
