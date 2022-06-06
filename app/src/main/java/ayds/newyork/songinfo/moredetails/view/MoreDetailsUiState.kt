@@ -8,6 +8,5 @@ data class MoreDetailsUiState (
     val url : String =  "",
     val urlBtnEnabled: Boolean = false,
     val source : Source? = null,
-    val image : String = "",
-    val currentCardListPosition : Int = 0
+    val image : String = ""
 )

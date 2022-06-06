@@ -20,13 +20,23 @@ internal class MoreDetailsControllerImpl(
         moreDetailsView.moreDetailsEventObservable.subscribe(observer)
     }
 
+    private fun updateIndex() {
+        moreDetailsModel.updateIndex()
+    }
+
     private val observer: Observer<MoreDetailsEvent> =
         Observer { value ->
             when (value) {
+                MoreDetailsEvent.GetNextCard -> getNextCard()
+                MoreDetailsEvent.UpdateIndex -> updateIndex()
                 MoreDetailsEvent.GetArtistInfo -> getArtistInfo()
                 MoreDetailsEvent.OpenArtistInfoLink -> openArtistInfoUrl()
             }
         }
+
+    private fun getNextCard(){
+        moreDetailsModel.getNextCard()
+    }
 
     private fun getArtistInfo() {
         Thread{

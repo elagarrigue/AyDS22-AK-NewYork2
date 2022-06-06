@@ -13,6 +13,8 @@ import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
 import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
+import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
 import ayds.newyork.songinfo.moredetails.model.entities.Source
 import ayds.observer.Observable
 import ayds.observer.Subject
@@ -38,7 +40,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private lateinit var btnUrl: Button
     private lateinit var btnNext: Button
     private lateinit var cardImg: ImageView
-    private lateinit var cards : List<Card>
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,43 +63,35 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initListeners(){
         btnUrl.setOnClickListener { notifyOpenArtistInfoUrl() }
-        btnNext.setOnClickListener { nextCard() }
+        btnNext.setOnClickListener { notifyGetNextCard() }
+    }
+
+    private fun notifyGetNextCard() {
+        onActionSubject.notify(MoreDetailsEvent.GetNextCard)
     }
 
     private fun notifyOpenArtistInfoUrl() {
         onActionSubject.notify(MoreDetailsEvent.OpenArtistInfoLink)
     }
 
-    private fun nextCard(){
-        var newIndex = uiState.currentCardListPosition+1
-        if(newIndex >= cards.size){
-            newIndex = 0
-        }
-        uiState = uiState.copy(
-            currentCardListPosition = newIndex
-        )
-        updateMoreDetailsUiState(cards)
-    }
-
-    private fun updateUiState(cardsList: List<Card>) {
-        if(cardsList.isEmpty()){
-            updateNoResultsUiState()
-            disableBtnNext()
-        }else{
-            cards = cardsList
-            updateMoreDetailsUiState(cardsList)
+    private fun updateUiState(card: Card) {
+        when(card){
+            is ExternalCard -> updateMoreDetailsUiState(card)
+            is EmptyCard -> {
+                updateNoResultsUiState()
+                disableBtnNext()
+            }
         }
     }
 
-    private fun updateMoreDetailsUiState(cardsList : List<Card>) {
-        var currentCard = cardsList.get(uiState.currentCardListPosition)
+    private fun updateMoreDetailsUiState(card : Card) {
         uiState = uiState.copy(
-            name = currentCard.artistName,
-            article = artistInfoDescriptionHelper.getCardText(currentCard),
-            url = currentCard.infoUrl,
+            name = card.artistName,
+            article = artistInfoDescriptionHelper.getCardText(card),
+            url = card.infoUrl,
             urlBtnEnabled = true,
-            source = currentCard.source,
-            image = currentCard.sourceLogoUrl,
+            source = card.source,
+            image = card.sourceLogoUrl,
         )
         updateCard()
     }
@@ -110,7 +104,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             urlBtnEnabled = false,
             source = null,
             image = "",
-            currentCardListPosition = 0
         )
     }
 
@@ -131,22 +124,15 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
             .subscribe{ value -> updateCardInfo(value) }
     }
 
-    private fun updateCardInfo(artistInfoFromRepository : List<Card>) {
+    private fun updateCardInfo(artistInfoFromRepository : Card) {
         updateUiState(artistInfoFromRepository)
     }
 
     private fun updateCard(){
         initListeners()
         updateUrlBtnState()
-        updateBtnNext()
         applyImage()
         applyText()
-    }
-
-    private fun updateBtnNext(){
-        if(cards.size <= 1){
-            disableBtnNext()
-        }
     }
 
     private fun applyImage() {
