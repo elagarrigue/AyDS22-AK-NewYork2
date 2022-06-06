@@ -35,7 +35,7 @@ class MoreDetailsControllerImplTest {
 
         onActionSubject.notify(MoreDetailsEvent.GetArtistInfo)
 
-        verify { moreDetailsModel.searchCard("name") }
+        verify { moreDetailsModel.searchCards("name") }
     }
 
     @Test

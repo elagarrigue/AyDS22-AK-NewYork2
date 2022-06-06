@@ -24,7 +24,7 @@ class MoreDetailsModelImplTest {
             artistTester(it)
         }
 
-        moreDetailsModel.searchCard("name")
+        moreDetailsModel.searchCards("name")
 
         verify { artistTester(card) }
     }
