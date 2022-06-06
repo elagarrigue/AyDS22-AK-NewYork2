@@ -1,5 +1,6 @@
 package ayds.newyork.songinfo.moredetails.model.repository.external
 
+import ayds.lisboa1.lastfm.LastFMArtistBiography
 import ayds.lisboa1.lastfm.LastFMService
 import ayds.newyork.songinfo.moredetails.model.entities.Card
 import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
@@ -10,19 +11,20 @@ internal class LastFMProxy(private val lastFmService : LastFMService) : Proxy {
     override fun getCard(name: String): Card? {
         var card : Card? = null
         try{
-            val artist = lastFmService.getArtistBio(name)
-            if (artist != null) {
-                card = ExternalCard(
-                    artist.artist,
-                    artist.biography,
-                    artist.articleUrl,
-                    Source.LASTFM,
-                    artist.logoUrl
-                )
-            }
+            lastFmService.getArtistBio(name)?.let{ card = mapCard(it) }
         } catch(e : Exception){
             card = null
         }
         return card
+    }
+
+    private fun mapCard(artist: LastFMArtistBiography): ExternalCard {
+        return ExternalCard(
+            artist.artist,
+            artist.biography,
+            artist.articleUrl,
+            Source.LASTFM,
+            artist.logoUrl
+        )
     }
 }
