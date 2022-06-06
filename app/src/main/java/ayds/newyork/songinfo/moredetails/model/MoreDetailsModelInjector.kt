@@ -26,7 +26,8 @@ object MoreDetailsModelInjector {
         val nytimesProxy = NewYorkTimesProxy(NYTimesInjector.nyTimesService)
         val lastFmProxy = LastFMProxy(LastFMInjector.lastFMService)
         val wikipediaProxy = WikipediaDataProxy(WikipediaInjector.wikipediaService)
-        val broker : Broker = BrokerImpl(nytimesProxy, lastFmProxy, wikipediaProxy)
+        val proxyList : List<Proxy> = mutableListOf(nytimesProxy,lastFmProxy,wikipediaProxy)
+        val broker : Broker = BrokerImpl(proxyList)
 
         val localStorage : LocalStorage = LocalStorageImpl(moreDetailsView as Context)
         val repository : CardRepository = CardRepositoryImpl(localStorage, broker)
