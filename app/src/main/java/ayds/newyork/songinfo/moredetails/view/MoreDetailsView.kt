@@ -67,8 +67,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun notifyGetNextCard() {
-        onActionSubject.notify(MoreDetailsEvent.GetNextCard)
         onActionSubject.notify(MoreDetailsEvent.UpdateIndex)
+        onActionSubject.notify(MoreDetailsEvent.GetNextCard)
     }
 
     private fun notifyOpenArtistInfoUrl() {
