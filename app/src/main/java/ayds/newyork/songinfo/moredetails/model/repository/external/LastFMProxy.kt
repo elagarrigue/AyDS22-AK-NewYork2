@@ -9,13 +9,11 @@ import java.lang.Exception
 
 internal class LastFMProxy(private val lastFmService : LastFMService) : Proxy {
     override fun getCard(name: String): Card? {
-        var card : Card? = null
-        try{
-            lastFmService.getArtistBio(name)?.let{ card = mapCard(it) }
+        return try{
+            lastFmService.getArtistBio(name)?.let{ mapCard(it) }
         } catch(e : Exception){
-            card = null
+            null
         }
-        return card
     }
 
     private fun mapCard(artist: LastFMArtistBiography): ExternalCard {

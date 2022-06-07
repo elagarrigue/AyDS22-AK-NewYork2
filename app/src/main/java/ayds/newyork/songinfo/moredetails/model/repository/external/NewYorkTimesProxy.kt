@@ -9,13 +9,11 @@ import java.lang.Exception
 
 internal class NewYorkTimesProxy(private val nytimesService : NYTimesService) : Proxy {
     override fun getCard(name: String): Card? {
-        var card : Card? = null
-        try{
-            nytimesService.getArtist(name)?.let { card = mapCard(it) }
+        return try{
+            nytimesService.getArtist(name)?.let{ mapCard(it) }
         } catch(e : Exception){
-            card = null
+            null
         }
-        return card
     }
 
     private fun mapCard(artist: NYTimesArtistInfo): ExternalCard {

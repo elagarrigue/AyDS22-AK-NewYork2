@@ -9,13 +9,11 @@ import java.lang.Exception
 
 internal class WikipediaDataProxy(private val wikiService : ExternalRepository) : Proxy {
     override fun getCard(name: String): Card? {
-        var card : Card? = null
-        try{
-            wikiService.getArtistDescription(name)?.let { card = mapCard(it,name) }
+        return try{
+            wikiService.getArtistDescription(name).let{ mapCard(it, name) }
         } catch(e : Exception){
-            card = null
+            null
         }
-        return card
     }
 
     private fun mapCard(artist: WikipediaArticle, name : String): ExternalCard {
