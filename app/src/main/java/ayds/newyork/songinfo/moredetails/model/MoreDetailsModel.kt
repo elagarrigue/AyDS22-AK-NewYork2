@@ -10,7 +10,6 @@ interface MoreDetailsModel {
     val artistObservable : Observable<Card>
 
     fun searchCards(name: String)
-    fun updateIndex()
     fun getNextCard()
 }
 
@@ -26,7 +25,7 @@ internal class  MoreDetailsModelImpl (private val repository: CardRepository) : 
         }
     }
 
-    override fun updateIndex() {
+    private fun updateIndex() {
         index += 1
         if(index >= cards.size){
             index = 0
@@ -34,11 +33,11 @@ internal class  MoreDetailsModelImpl (private val repository: CardRepository) : 
     }
 
     override fun getNextCard() {
+        updateIndex()
         if(!cards.isEmpty()){
             artistObservable.notify(cards[index])
         }else{
             artistObservable.notify(EmptyCard)
         }
-
     }
 }

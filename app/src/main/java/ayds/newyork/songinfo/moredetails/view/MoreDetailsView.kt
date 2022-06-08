@@ -67,7 +67,6 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     }
 
     private fun notifyGetNextCard() {
-        onActionSubject.notify(MoreDetailsEvent.UpdateIndex)
         onActionSubject.notify(MoreDetailsEvent.GetNextCard)
     }
 
