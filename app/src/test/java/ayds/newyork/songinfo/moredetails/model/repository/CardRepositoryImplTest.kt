@@ -15,8 +15,7 @@ import org.junit.Test
 
 
 class CardRepositoryImplTest {
-
-
+    
     private val localStorage: LocalStorage = mockk(relaxUnitFun = true)
     private val brokerService: Broker = mockk(relaxUnitFun = true)
 
