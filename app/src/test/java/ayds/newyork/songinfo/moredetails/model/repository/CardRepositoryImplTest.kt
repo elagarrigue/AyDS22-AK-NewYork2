@@ -1,7 +1,6 @@
 package ayds.newyork.songinfo.moredetails.model.repository
 
 import ayds.newyork.songinfo.moredetails.model.entities.Card
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
 import ayds.newyork.songinfo.moredetails.model.entities.Source
 import ayds.newyork.songinfo.moredetails.model.repository.external.Broker
@@ -13,9 +12,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-
 class CardRepositoryImplTest {
-    
+
     private val localStorage: LocalStorage = mockk(relaxUnitFun = true)
     private val brokerService: Broker = mockk(relaxUnitFun = true)
 
@@ -44,7 +42,6 @@ class CardRepositoryImplTest {
         list.add(card3)
     }
 
-
     @Test
     fun `given existing artist by name should return artist and mark it as local`() {
         every { localStorage.getCardsByName("name") } returns list
@@ -55,7 +52,6 @@ class CardRepositoryImplTest {
         list.forEach{
             Assert.assertTrue(it.isLocallyStored)
         }
-
     }
 
     @Test
@@ -66,7 +62,6 @@ class CardRepositoryImplTest {
         val result = cardRepository.getCardsByName("name")
 
         Assert.assertEquals(list, result)
-
         list.forEach{
             Assert.assertFalse(it.isLocallyStored)
         }
@@ -80,6 +75,7 @@ class CardRepositoryImplTest {
 
         val result = cardRepository.getCardsByName("name")
         val empty : List<Card> = mutableListOf()
+
         Assert.assertEquals(empty, result)
     }
 
@@ -90,6 +86,7 @@ class CardRepositoryImplTest {
 
         val result = cardRepository.getCardsByName("name")
         val empty : List<Card> = mutableListOf()
+
         Assert.assertEquals(empty, result)
     }
 }
