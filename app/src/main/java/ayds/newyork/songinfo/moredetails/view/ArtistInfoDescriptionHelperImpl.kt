@@ -7,7 +7,8 @@ import java.lang.StringBuilder
 import java.util.*
 
 interface ArtistInfoDescriptionHelper {
-    fun getCardText(artist: Card = EmptyCard) : String
+    fun getCardText(artist: Card) : String
+    fun getNotFoundText() : String
 }
 
 private const val NY_NOT_FOUND = "Artist not found"
@@ -25,17 +26,15 @@ internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
 
     override fun getCardText(artist: Card): String {
         val abstract  = "${if (artist.isLocallyStored) LOCALLY_STORED_SYMBOL else "" } ${artist.description}"
-        return when(artist) {
-            is ExternalCard -> getFormattedArtistInfoTextArtist(abstract, artist)
-            else -> getNotFoundArtistInfoText()
-        }
+        return getFormattedArtistInfoTextArtist(abstract, artist)
     }
+
 
     private fun getFormattedArtistInfoTextArtist(abstract: String, artist: Card): String {
         return boldArtisName(renderAbstractAsHtml(abstract),artist.artistName)
     }
 
-    private fun getNotFoundArtistInfoText(): String {
+    override fun getNotFoundText(): String {
         return renderAbstractAsHtml(NY_NOT_FOUND)
     }
 

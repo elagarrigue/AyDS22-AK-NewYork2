@@ -99,7 +99,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
     private fun updateNoResultsUiState() {
         uiState = uiState.copy(
             name = "",
-            article = artistInfoDescriptionHelper.getCardText(),
+            article = artistInfoDescriptionHelper.getNotFoundText(),
             url = "" ,
             urlBtnEnabled = false,
             source = null,
