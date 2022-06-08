@@ -17,16 +17,29 @@ class MoreDetailsModelImplTest {
 
     @Test
     fun `on search song it should notify the result`() {
-        val card: List<Card> = mockk()
-        every { repository.getCardsByName("name") } returns card
-        val artistTester: (List<Card>) -> Unit = mockk(relaxed = true)
-        moreDetailsModel.artistObservable.subscribe {
-            artistTester(it)
+
+        val cards: MutableList<Card> = mutableListOf()
+        val card: Card = mockk()
+
+        cards.add(card)
+        cards.add(card)
+        cards.add(card)
+
+        every { repository.getCardsByName("name") } returns cards
+
+        val artistTester: (Card) -> Unit = mockk(relaxed = true)
+
+        cards.forEach {
+            moreDetailsModel.artistObservable.subscribe {
+                artistTester(it)
+            }
         }
 
         moreDetailsModel.searchCards("name")
 
-        verify { artistTester(card) }
+        cards.forEach{
+            verify { artistTester(it) }
+        }
     }
 
 }
