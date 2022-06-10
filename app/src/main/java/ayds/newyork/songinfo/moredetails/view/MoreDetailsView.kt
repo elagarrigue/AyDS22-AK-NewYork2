@@ -143,7 +143,7 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun applyText() {
         runOnUiThread {
-            textSource.text = uiState.source?.getText()
+            textSource.text = uiState.source?.value
             textAbstract.text = getAbstractAsHtml()
         }
     }
