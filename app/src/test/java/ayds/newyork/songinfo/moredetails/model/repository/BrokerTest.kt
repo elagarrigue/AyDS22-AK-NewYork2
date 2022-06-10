@@ -5,8 +5,10 @@ import ayds.newyork.songinfo.moredetails.model.repository.external.BrokerImpl
 import ayds.newyork.songinfo.moredetails.model.repository.external.Proxy
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import kotlin.text.Typography.times
 
 class BrokerTest {
     private val proxy: Proxy = mockk()
@@ -29,6 +31,11 @@ class BrokerTest {
 
         every { proxy.getCard("name") } returns card
         val cards = broker.getCards("name")
+
+        for(p in proxyList){
+            verify { p.getCard("name") }
+        }
+
         assertEquals(cardsInfo, cards)
     }
 }
