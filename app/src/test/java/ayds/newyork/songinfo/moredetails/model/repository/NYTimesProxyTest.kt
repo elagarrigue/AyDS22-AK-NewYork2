@@ -7,6 +7,7 @@ import ayds.newyork2.newyorkdata.nytimes.NYTimesArtistInfo
 import ayds.newyork2.newyorkdata.nytimes.NYTimesService
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.Test
 
@@ -38,6 +39,8 @@ class NYTimesProxyTest {
         every { nyTimesService.getArtist("name") } returns artistInfo
 
         val result = nyTimesProxy.getCard("name")
+
+        verify { nyTimesService.getArtist("name") }
         Assert.assertEquals(card, result)
     }
 
@@ -49,6 +52,8 @@ class NYTimesProxyTest {
         every { nyTimesService.getArtist("name") } returns null
 
         val result = nyTimesProxy.getCard("name")
+
+        verify{ nyTimesService.getArtist("name") }
         Assert.assertEquals(card, result)
     }
 }

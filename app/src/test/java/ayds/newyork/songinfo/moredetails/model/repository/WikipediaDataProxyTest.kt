@@ -7,6 +7,7 @@ import ayds.winchester2.wikipedia.ExternalRepository
 import ayds.winchester2.wikipedia.WikipediaArticle
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.Test
 
@@ -25,19 +26,21 @@ class WikipediaDataProxyTest {
             "name",
             "description",
             "urlInfo",
-            Source.LASTFM,
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Lastfm_logo.svg/320px-Lastfm_logo.svg.png",
+            Source.WIKIPEDIA,
+            "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png",
             false
         )
 
         val artistArticle = WikipediaArticle(
-            "name",
+            "urlInfo",
             "description",
-            "urlInfo"
+            "https://upload.wikimedia.org/wikipedia/commons/8/8c/Wikipedia-logo-v2-es.png"
         )
         every { wikipediaService.getArtistDescription("name") } returns artistArticle
 
         val result = wikipediaDataProxy.getCard("name")
+
+        verify { wikipediaService.getArtistDescription("name") }
         Assert.assertEquals(card, result)
     }
 
@@ -49,6 +52,8 @@ class WikipediaDataProxyTest {
         every { wikipediaService.getArtistDescription("name") }.throws(java.lang.IndexOutOfBoundsException())
 
         val result = wikipediaDataProxy.getCard("name")
+
+        verify { wikipediaService.getArtistDescription("name") }
         Assert.assertEquals(card, result)
     }
 }

@@ -7,6 +7,7 @@ import ayds.newyork.songinfo.moredetails.model.entities.Source
 import ayds.newyork.songinfo.moredetails.model.repository.external.LastFMProxy
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.Test
 
@@ -38,6 +39,8 @@ class LastFMProxyTest {
         every { lastFmService.getArtistBio("name") } returns artistBio
 
         val result = lastFmProxy.getCard("name")
+
+        verify { lastFmService.getArtistBio("name") }
         Assert.assertEquals(card, result)
     }
 
@@ -49,6 +52,8 @@ class LastFMProxyTest {
         every { lastFmService.getArtistBio("name") } returns null
 
         val result = lastFmProxy.getCard("name")
+
+        verify { lastFmService.getArtistBio("name") }
         Assert.assertEquals(card, result)
     }
 }
