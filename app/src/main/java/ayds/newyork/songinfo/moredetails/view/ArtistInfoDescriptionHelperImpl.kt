@@ -1,8 +1,6 @@
 package ayds.newyork.songinfo.moredetails.view
 
 import ayds.newyork.songinfo.moredetails.model.entities.Card
-import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
 import java.lang.StringBuilder
 import java.util.*
 
@@ -11,7 +9,7 @@ interface ArtistInfoDescriptionHelper {
     fun getNotFoundText() : String
 }
 
-private const val NY_NOT_FOUND = "Artist not found"
+private const val NOT_FOUND = "Artist not found"
 private const val LOCALLY_STORED_SYMBOL = "[*]"
 private const val WIDTH = "400"
 private const val HEADER = "<html><div width=$WIDTH>"
@@ -35,7 +33,7 @@ internal class ArtistInfoDescriptionHelperImpl : ArtistInfoDescriptionHelper {
     }
 
     override fun getNotFoundText(): String {
-        return renderAbstractAsHtml(NY_NOT_FOUND)
+        return renderAbstractAsHtml(NOT_FOUND)
     }
 
     private fun renderAbstractAsHtml(abstract: String): String {

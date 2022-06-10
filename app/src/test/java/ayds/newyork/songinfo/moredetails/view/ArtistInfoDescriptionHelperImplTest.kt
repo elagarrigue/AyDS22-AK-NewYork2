@@ -66,10 +66,9 @@ class ArtistInfoDescriptionHelperImplTest {
     }
 
     @Test
-    fun `given a non artist info it should return the artist not found description`() {
-        val card: Card = EmptyCard
+    fun `when asked to return a not found string it should do so in a formatted manner`() {
 
-        val result = artistInfoDescriptionHelperImplTest.getCardText(card)
+        val result = artistInfoDescriptionHelperImplTest.getNotFoundText()
 
         val expected = "<html><div width=400><font face=\"arial\">Artist not found</font></div></html>"
 
