@@ -12,9 +12,10 @@ import androidx.core.text.HtmlCompat
 import ayds.newyork.songinfo.R
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModel
 import ayds.newyork.songinfo.moredetails.model.MoreDetailsModelInjector
-import ayds.newyork.songinfo.moredetails.model.entities.Artist
-import ayds.newyork.songinfo.moredetails.model.entities.ArtistInfo
-import ayds.newyork.songinfo.moredetails.model.entities.EmptyArtist
+import ayds.newyork.songinfo.moredetails.model.entities.Card
+import ayds.newyork.songinfo.moredetails.model.entities.EmptyCard
+import ayds.newyork.songinfo.moredetails.model.entities.ExternalCard
+import ayds.newyork.songinfo.moredetails.model.entities.Source
 import ayds.observer.Observable
 import ayds.observer.Subject
 import com.squareup.picasso.Picasso
@@ -26,19 +27,21 @@ interface MoreDetailsView {
     fun openExternalLink(url: String)
 }
 
-private const val NY_TIMES_IMG = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVioI832nuYIXqzySD8cOXRZEcdlAj3KfxA62UEC4FhrHVe0f7oZXp3_mSFG7nIcUKhg&usqp=CAU"
-
 class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private val artistInfoDescriptionHelper: ArtistInfoDescriptionHelper = MoreDetailsViewInjector.artistInfoDescriptionHelper
     private val onActionSubject = Subject<MoreDetailsEvent>()
     override val moreDetailsEventObservable: Observable<MoreDetailsEvent> = onActionSubject
     private lateinit var moreDetailsModel: MoreDetailsModel
-    private lateinit var textAbstract: TextView
-    private lateinit var btnUrl: Button
-    private lateinit var nyTimesImg: ImageView
     override var uiState = MoreDetailsUiState()
-    
+
+    private lateinit var textAbstract: TextView
+    private lateinit var textSource: TextView
+    private lateinit var btnUrl: Button
+    private lateinit var btnNext: Button
+    private lateinit var cardImg: ImageView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_more_details_view)
@@ -60,41 +63,56 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initListeners(){
         btnUrl.setOnClickListener { notifyOpenArtistInfoUrl() }
+        btnNext.setOnClickListener { notifyGetNextCard() }
+    }
+
+    private fun notifyGetNextCard() {
+        onActionSubject.notify(MoreDetailsEvent.GetNextCard)
     }
 
     private fun notifyOpenArtistInfoUrl() {
         onActionSubject.notify(MoreDetailsEvent.OpenArtistInfoLink)
     }
 
-    private fun updateUiState(artist: Artist) {
-        when (artist) {
-            is ArtistInfo -> updateMoreDetailsUiState(artist)
-            EmptyArtist -> updateNoResultsUiState()
+    private fun updateUiState(card: Card) {
+        when(card){
+            is ExternalCard -> updateMoreDetailsUiState(card)
+            is EmptyCard -> {
+                updateNoResultsUiState()
+                disableBtnNext()
+            }
         }
     }
 
-    private fun updateMoreDetailsUiState(artist : Artist) {
+    private fun updateMoreDetailsUiState(card : Card) {
         uiState = uiState.copy(
-            name = artist.artistName,
-            article = artistInfoDescriptionHelper.getArtistInfoText(artist),
-            url = artist.artistUrl,
-            urlBtnEnabled = true
+            name = card.artistName,
+            article = artistInfoDescriptionHelper.getCardText(card),
+            url = card.infoUrl,
+            urlBtnEnabled = true,
+            source = card.source,
+            image = card.sourceLogoUrl,
         )
+        updateCard()
     }
 
     private fun updateNoResultsUiState() {
         uiState = uiState.copy(
             name = "",
-            article = artistInfoDescriptionHelper.getArtistInfoText(),
+            article = artistInfoDescriptionHelper.getNotFoundText(),
             url = "" ,
-            urlBtnEnabled = false
+            urlBtnEnabled = false,
+            source = null,
+            image = "",
         )
     }
 
     private fun initProperties() {
-        textAbstract = findViewById(R.id.textPane2)
+        textAbstract = findViewById(R.id.descriptionText)
+        textSource = findViewById(R.id.sourceText)
         btnUrl = findViewById(R.id.openUrlButton)
-        nyTimesImg = findViewById(R.id.imageView)
+        cardImg = findViewById(R.id.imageView)
+        btnNext = findViewById(R.id.nextCardButton)
     }
 
     private fun notifyGetArtistInfoAction() {
@@ -103,11 +121,14 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun initObservers() {
         moreDetailsModel.artistObservable
-            .subscribe{ value -> updateArtistInfo(value) }
+            .subscribe{ value -> updateCardInfo(value) }
     }
 
-    private fun updateArtistInfo(artistInfoFromRepository : Artist) {
+    private fun updateCardInfo(artistInfoFromRepository : Card) {
         updateUiState(artistInfoFromRepository)
+    }
+
+    private fun updateCard(){
         initListeners()
         updateUrlBtnState()
         applyImage()
@@ -116,13 +137,23 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun applyImage() {
         runOnUiThread {
-            Picasso.get().load(NY_TIMES_IMG).into(nyTimesImg)
+            Picasso.get().load(uiState.image).into(cardImg)
         }
     }
 
     private fun applyText() {
         runOnUiThread {
+            textSource.text = uiState.source?.value
             textAbstract.text = getAbstractAsHtml()
+        }
+    }
+
+    private fun getSource(source : Source?) : String{
+        return when (source) {
+            Source.LASTFM -> "LASTFM"
+            Source.WIKIPEDIA -> "WIKIPEDIA"
+            Source.NEWYORKTIMES -> "NEWYORKTIMES"
+            else -> "Not Found"
         }
     }
 
@@ -132,6 +163,12 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
 
     private fun updateUrlBtnState() {
         enableActions(uiState.urlBtnEnabled)
+    }
+
+    private fun disableBtnNext(){
+        runOnUiThread {
+            btnNext.isEnabled = false
+        }
     }
 
     private fun enableActions(enable: Boolean) {
@@ -145,6 +182,8 @@ class MoreDetailsViewActivity : AppCompatActivity(), MoreDetailsView {
         intent.data = Uri.parse(uiState.url)
         startActivity(intent)
     }
+
+
 
     private fun formatHtml(abstractHtml : String) : Spanned {
         return HtmlCompat.fromHtml(

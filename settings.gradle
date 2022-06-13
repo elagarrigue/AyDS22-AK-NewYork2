@@ -1,3 +1,10 @@
 include ':app'
+
+include ':NewYorkTimesData'
+project(':NewYorkTimesData').projectDir = new File('libs/NewYorkTimesData')
+include ':lastfmdata'
+project(':lastfmdata').projectDir = new File('libs/LastFMData')
+include ':WikipediaData'
+project(':WikipediaData').projectDir = new File('libs/WikipediaData')
 include 'observer'
 rootProject.name = "AK New York"

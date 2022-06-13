@@ -1,13 +1,19 @@
 package ayds.newyork.songinfo.moredetails.model
 
 import android.content.Context
-import ayds.newyork.songinfo.moredetails.model.repository.ArtistInfoRepository
-import ayds.newyork.songinfo.moredetails.model.repository.ArtistInfoRepositoryImpl
-import ayds.newyork.songinfo.moredetails.model.repository.external.nytimes.NYTimesInjector
-import ayds.newyork.songinfo.moredetails.model.repository.external.nytimes.NYTimesService
-import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.NYTimesLocalStorage
-import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.sqldb.NYTimesLocalStorageImpl
+import ayds.lisboa1.lastfm.LastFMInjector
+import ayds.newyork.songinfo.moredetails.model.repository.CardRepository
+import ayds.newyork.songinfo.moredetails.model.repository.CardRepositoryImpl
+import ayds.newyork.songinfo.moredetails.model.repository.external.*
+import ayds.newyork.songinfo.moredetails.model.repository.external.BrokerImpl
+import ayds.newyork.songinfo.moredetails.model.repository.external.LastFMProxy
+import ayds.newyork.songinfo.moredetails.model.repository.external.NewYorkTimesProxy
+import ayds.newyork.songinfo.moredetails.model.repository.external.WikipediaDataProxy
+import ayds.newyork2.newyorkdata.nytimes.NYTimesInjector
+import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.LocalStorage
+import ayds.newyork.songinfo.moredetails.model.repository.local.nytimes.sqldb.LocalStorageImpl
 import ayds.newyork.songinfo.moredetails.view.MoreDetailsView
+import ayds.winchester2.wikipedia.WikipediaInjector
 
 
 object MoreDetailsModelInjector {
@@ -17,9 +23,14 @@ object MoreDetailsModelInjector {
     fun getMoreDetailsModel(): MoreDetailsModel = moreDetailsModel
 
     fun initMoreDetailsModel(moreDetailsView: MoreDetailsView) {
-        val nyTimesLocalStorage : NYTimesLocalStorage = NYTimesLocalStorageImpl(moreDetailsView as Context)
-        val nytService : NYTimesService = NYTimesInjector.nyTimesService
-        val repository : ArtistInfoRepository = ArtistInfoRepositoryImpl(nyTimesLocalStorage, nytService)
+        val nytimesProxy = NewYorkTimesProxy(NYTimesInjector.nyTimesService)
+        val lastFmProxy = LastFMProxy(LastFMInjector.lastFMService)
+        val wikipediaProxy = WikipediaDataProxy(WikipediaInjector.wikipediaService)
+        val proxyList : List<Proxy> = mutableListOf(nytimesProxy,lastFmProxy,wikipediaProxy)
+        val broker : Broker = BrokerImpl(proxyList)
+
+        val localStorage : LocalStorage = LocalStorageImpl(moreDetailsView as Context)
+        val repository : CardRepository = CardRepositoryImpl(localStorage, broker)
         moreDetailsModel = MoreDetailsModelImpl(repository)
     }
 
